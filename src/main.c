@@ -1,49 +1,45 @@
 #include "../philo.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <unistd.h>
-#include <sys/time.h>
+bool	lock_fork(
+	pthread_mutex_t *fork_mutex, double time_to_die, double timestamp)
+{
+	while (_get_time_static(false) - timestamp < time_to_die)
+	{
+		if (!pthread_mutex_lock(fork_mutex))
+			return (true);
+	}
+	return (false);
+}
 
 void	*philosopher_routine(void *arg)
 {
-	t_philosopher	*philosopher;
-	double			start;
-	double			pre;
-	double			post;
+	t_philosopher	*philo;
+	double			timestamp;
 
-	philosopher = (t_philosopher *)arg;
-	start = _get_time(0);
-	while (philosopher->times_eaten < philosopher->max_meals)
+	philo = (t_philosopher *)arg;
+	_get_time_static(true);
+	while (philo->times_eaten < philo->max_meals)
 	{
-		// Pick up forks (lock mutexes)
-		pthread_mutex_lock(&philosopher->forks[philosopher->left_fork]);
-		pthread_mutex_lock(&philosopher->forks[philosopher->right_fork]);
-		post = _get_time(start);
-		if (post - pre > (double)philosopher->time_to_die)
+		pthread_mutex_lock(&philo->forks[philo->left_fork]);// LEFTOFF!!
+		print_action(philo->id, "has taken a fork");
+		pthread_mutex_lock(&philo->forks[philo->right_fork]);
+		if (_get_time_static(false) - timestamp > (double)philo->time_to_die)
 		{
-			pthread_mutex_unlock(&philosopher->forks[philosopher->right_fork]);
-			pthread_mutex_unlock(&philosopher->forks[philosopher->left_fork]);
-			printf("%.3f %d died\n", post, philosopher->id);
+			print_action(philo->id, "died");
+			pthread_mutex_unlock(&philo->forks[philo->right_fork]);
+			pthread_mutex_unlock(&philo->forks[philo->left_fork]);
 			return (NULL);
 		}
-		printf("%.3f %d has taken a fork\n", post, philosopher->id);
-		// Simulate eating
-		pre = _get_time(start);
-		printf("%.3f %d is eating\n", pre, philosopher->id);
-		usleep(philosopher->time_to_eat);
-		philosopher->times_eaten++;
-		// Put down forks (unlock mutexes)
-		pthread_mutex_unlock(&philosopher->forks[philosopher->right_fork]);
-		pthread_mutex_unlock(&philosopher->forks[philosopher->left_fork]);
-		// Simulate sleeping
-		pre = _get_time(start);
-		printf("%.3f %d is sleeping\n", pre, philosopher->id);
-		usleep(philosopher->time_to_sleep);
-		// Simulate thinking (no specific action needed)
-		pre = _get_time(start);
-		printf("%.3f %d is thinking\n", pre, philosopher->id);
+		print_action(philo->id, "has taken a fork");
+		print_action(philo->id, "is eating");
+		usleep(philo->time_to_eat);
+		philo->times_eaten++;
+		pthread_mutex_unlock(&philo->forks[philo->right_fork]);
+		pthread_mutex_unlock(&philo->forks[philo->left_fork]);
+		print_action(philo->id, "is sleeping");
+		usleep(philo->time_to_sleep);
+		timestamp = _get_time_static(false);
+		print_action(philo->id, "is thinking");
 	}
 	return NULL;
 }
@@ -55,12 +51,9 @@ void	 execution(t_inp_param *input)
 	t_philosopher	phil_data[input->number_of_philosophers];
 	int				i;
 
-	// Initialize mutexes
 	i = 0;
-	for (int i = 0; i < input->number_of_philosophers; i++) {
-		pthread_mutex_init(&forks[i], NULL);
-	}
-	// Initialize and create philosopher threads
+	while (i < input->number_of_philosophers)
+		pthread_mutex_init(&forks[i++], NULL);
 	i = 0;
 	while (i < input->number_of_philosophers)
 	{
@@ -76,11 +69,9 @@ void	 execution(t_inp_param *input)
 		pthread_create(&philosophers[i], NULL, philosopher_routine, &phil_data[i]);
 		++i;
 	}
-	// Join all threads (wait for them to finish)
 	i = 0;
 	while (i < input->number_of_philosophers)
 		pthread_join(philosophers[i++], NULL);
-	// Destroy mutexes
 	i = 0;
 	while (i < input->number_of_philosophers)
 		pthread_mutex_destroy(&forks[i++]);

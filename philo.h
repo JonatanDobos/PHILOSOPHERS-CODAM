@@ -16,6 +16,10 @@
 # include <termios.h>
 # include <pthread.h>
 
+// TEST!
+# define C_RESET "\033[0m"
+# define C_BOLD "\033[1m"
+
 typedef struct timeval	t_tv;
 
 typedef struct s_input_param
@@ -42,5 +46,7 @@ typedef struct s_philosopher
 
 int		_atoi(char *str);
 double	_get_time(double start);
+double	_get_time_static(bool set_start);
+void	print_action(int p_id, char *message);
 
 #endif
