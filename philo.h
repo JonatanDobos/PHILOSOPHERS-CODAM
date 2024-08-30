@@ -42,11 +42,11 @@ typedef struct s_philosopher
 	int				time_to_sleep;
 	int				time_to_die;
 	int				max_meals;
+	bool			*death;
 }	t_philosopher;
 
-int		_atoi(char *str);
-double	_get_time(double start);
-double	_get_time_static(bool set_start);
-void	print_action(int p_id, char *message);
+int			_atoi(char *str);
+__uint64_t	_get_time_ms(void);
+void		print_action(int p_id, char *message);
 
 #endif

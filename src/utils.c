@@ -17,28 +17,17 @@ int	_atoi(char *str)
 	return (ret);
 }
 
-double	_get_time(double start)// deprecated??
+__uint64_t	_get_time_ms(void)
 {
 	t_tv	tv;
 
 	gettimeofday(&tv, NULL);
-	return (((double)tv.tv_usec / 1000) - start);
-}
-
-double	_get_time_static(bool set_start)
-{
-	t_tv				tv;
-	static long long	starting_point = 0;
-
-	gettimeofday(&tv, NULL);
-	if (set_start)
-		starting_point = tv.tv_usec;
-	return ((double)(tv.tv_usec - starting_point) / 1000);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
 void	print_action(int p_id, char *message)
 {
-	const double	time = _get_time_static(false);
+	const __uint64_t	time = _get_time_ms();
 	
-	printf("%.3f %s%d%s %s\n", time, C_BOLD, p_id, C_RESET, message);
+	printf("%lu %d %s\n", time, p_id, message);
 }
