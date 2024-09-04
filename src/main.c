@@ -1,6 +1,6 @@
 #include "../philo.h"
 
-bool	lock_fork(t_philosopher *philo, uint64_t timestamp, bool fork)
+bool	lock_fork(t_philosopher *philo, __uint64_t timestamp, bool fork)
 {
 	while (_get_time_ms() - timestamp < philo->param->time_to_die)
 	{
@@ -39,7 +39,7 @@ bool	clean_forks(t_philosopher *philo)
 void	*routine(void *arg)
 {
 	t_philosopher	*philo;
-	uint64_t		timestamp;
+	__uint64_t		timestamp;
 
 	philo = (t_philosopher *)arg;
 	while (!philo->param->max_meals
@@ -61,7 +61,7 @@ void	 setup_threads(t_param *param)
 {
 	pthread_t		philosophers[param->number_of_philosophers];
 	pthread_mutex_t	forks[param->number_of_philosophers];
-	pthread_mutex_t	write;
+	pthread_mutex_t	monitors[param->number_of_philosophers];
 	t_philosopher	phil_data[param->number_of_philosophers];
 	int				i;
 
@@ -72,7 +72,6 @@ void	 setup_threads(t_param *param)
 	while (i < param->number_of_philosophers)
 	{
 		phil_data->forks = forks;
-		phil_data->write = write;
 		init_philosopher_data(&phil_data[i], param, i);
 		pthread_create(&philosophers[i], NULL, routine, &phil_data[i]);
 		pthread_detach(philosophers[i]);
@@ -83,12 +82,13 @@ void	 setup_threads(t_param *param)
 
 int	main(int argc, char **argv)
 {
-	t_param	param;
-	bool	death_signal;
+	t_param			param;
+	pthread_mutex_t	write;
+	bool			death_signal;
 
 	if (argc < 5 || argc > 6)
 	{
-		printf("Usage: %s number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n", argv[0]);
+		printf("Usage: %s %s", argv[0], PROMPT);
 		return 1;
 	}
 	param.number_of_philosophers = _atoi(argv[1]);
@@ -99,6 +99,7 @@ int	main(int argc, char **argv)
 		param.max_meals = _atoi(argv[5]);
 	else
 		param.max_meals = 0;
+	param.write = write;
 	setup_threads(&param);
 	return (0);
 }

@@ -17,19 +17,19 @@ int	_atoi(char *str)
 	return (ret);
 }
 
-uint64_t	_get_time_ms(void)
+__uint64_t	_get_time_ms(void)
 {
 	t_tv	tv;
 
 	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * (uint64_t)1000) + (tv.tv_usec / (uint64_t)1000));
+	return ((tv.tv_sec * (__uint64_t)1000) + (tv.tv_usec / (__uint64_t)1000));
 }
 
 void	print_action(t_philosopher *philo, char *message)
 {
-	const uint64_t	time = _get_time_ms() - philo->param->start_time;
+	const __uint64_t	time = _get_time_ms() - philo->param->start_time;
 	
-	pthread_mutex_lock(&philo->write);
+	pthread_mutex_lock(&philo->param->write);
 	printf("%llu %d %s\n", time, philo->id, message);
-	pthread_mutex_unlock(&philo->write);
+	pthread_mutex_unlock(&philo->param->write);
 }
