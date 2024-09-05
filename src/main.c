@@ -1,17 +1,5 @@
 #include "../philo.h"
 
-bool	lock_fork(t_philosopher *philo, __uint64_t timestamp, bool fork)
-{
-	while (_get_time_ms() - timestamp < philo->param->time_to_die)
-	{
-		if (fork && !pthread_mutex_lock(&philo->forks[philo->r_fork]))
-			return (print_action(philo->id, "has taken a fork"), true);
-		if (!fork && !pthread_mutex_lock(&philo->forks[philo->l_fork]))
-			return (print_action(philo->id, "has taken a fork"), true);
-	}
-	return (false);
-}
-
 void	take_forks(t_philosopher *philo)
 {
 	if (philo->id % 2 == 0)
@@ -54,52 +42,54 @@ void	*routine(void *arg)
 		usleep(philo->param->time_to_sleep * 1000);
 		print_action(philo->id, "is thinking");
 	}
-	return NULL;
+	return (NULL);
 }
 
-void	 setup_threads(t_param *param)
+bool	 setup_threads(t_param *param)
 {
 	pthread_t		philosophers[param->number_of_philosophers];
 	pthread_mutex_t	forks[param->number_of_philosophers];
-	pthread_mutex_t	monitors[param->number_of_philosophers];
+	pthread_t		observer;
 	t_philosopher	phil_data[param->number_of_philosophers];
 	int				i;
 
 	init_mutex(forks, param->number_of_philosophers);
-	init_mutex(&write, 1);
 	i = 0;
 	param->start_time = _get_time_ms();
+	if (pthread_create(&observer, NULL, observer_routine, param))
+		return (destroy_mutex(forks, param->number_of_philosophers), 0);
 	while (i < param->number_of_philosophers)
 	{
 		phil_data->forks = forks;
 		init_philosopher_data(&phil_data[i], param, i);
-		pthread_create(&philosophers[i], NULL, routine, &phil_data[i]);
-		pthread_detach(philosophers[i]);
+		if (pthread_create(&philosophers[i], NULL, routine, &phil_data[i]))
+			exit(EXIT_FAILURE);
 		++i;
 	}
-	destroy_mutex(forks, param->number_of_philosophers);
+	while (i < param->number_of_philosophers)
+	{
+		if (pthread_join(philosophers[i++], NULL) != 0)
+			return (destroy_mutex(forks, param->number_of_philosophers), 0);
+	}
+	return (destroy_mutex(forks, param->number_of_philosophers), 1);
 }
 
 int	main(int argc, char **argv)
 {
 	t_param			param;
-	pthread_mutex_t	write;
-	bool			death_signal;
+	pthread_mutex_t	write_lock;
+	bool			death_flag;
 
-	if (argc < 5 || argc > 6)
+	if (argc < 5 || argc > 6 || !input_handling(argc, argv))
 	{
-		printf("Usage: %s %s", argv[0], PROMPT);
-		return 1;
+		printf("Syntax Error!\nUsage: %s %s", argv[0], PROMPT);
+		return (EXIT_FAILURE);
 	}
-	param.number_of_philosophers = _atoi(argv[1]);
-	param.time_to_die = _atoi(argv[2]);
-	param.time_to_eat = _atoi(argv[3]);
-	param.time_to_sleep = _atoi(argv[4]);
-	if (argc == 6)
-		param.max_meals = _atoi(argv[5]);
-	else
-		param.max_meals = 0;
-	param.write = write;
-	setup_threads(&param);
-	return (0);
+	death_flag = false;
+	init_mutex(&write_lock, 1);
+	param.write_lock = write_lock;
+	param.death_flag = &death_flag;
+	if (!setup_threads(&param))
+		return (destroy_mutex(&write_lock, 1), EXIT_FAILURE);
+	return (destroy_mutex(&write_lock, 1), EXIT_SUCCESS);
 }

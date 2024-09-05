@@ -1,6 +1,6 @@
 #include "../philo.h"
 
-void	monitor(void *arg)
+void	*observer_routine(void *arg)
 {
 	const t_param	*param = (t_param *)arg;
 	

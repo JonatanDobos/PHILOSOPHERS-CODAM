@@ -11,7 +11,7 @@ SRCDIR	=	./src
 SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/utils.c
 			$(SRCDIR)/init.c
-			$(SRCDIR)/monitor.c
+			$(SRCDIR)/observer.c
 			$(SRCDIR)/mutex.c
 
 OBJ	=	$(SRC:.c=.o)

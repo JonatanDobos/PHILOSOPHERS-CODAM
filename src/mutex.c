@@ -6,7 +6,10 @@ void	init_mutex(pthread_mutex_t *mutexes, int amount)
 	
 	i = 0;
 	while (i < amount)
-		pthread_mutex_init(&mutexes[i++], NULL);
+	{
+		if (pthread_mutex_init(&mutexes[i++], NULL))
+			exit(EXIT_FAILURE);
+	}
 }
 
 void	destroy_mutex(pthread_mutex_t *mutexes, int amount)
@@ -15,5 +18,8 @@ void	destroy_mutex(pthread_mutex_t *mutexes, int amount)
 	
 	i = 0;
 	while (i < amount)
-		pthread_mutex_destroy(&mutexes[i++]);
+	{
+		if (pthread_mutex_destroy(&mutexes[i++]))
+			exit(EXIT_FAILURE);
+	}
 }

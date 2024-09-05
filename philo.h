@@ -32,8 +32,9 @@ typedef struct s_param
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				max_meals;
+	bool			*death_flag;
 	__uint64_t		start_time;
-	pthread_mutex_t	write;
+	pthread_mutex_t	write_lock;
 }	t_param;
 
 typedef struct s_philosopher
@@ -49,6 +50,9 @@ typedef struct s_philosopher
 int			_atoi(char *str);
 __uint64_t	_get_time_ms(void);
 void		print_action(t_philosopher *philo, char *message);
+bool		init_parameters(int argc, char **argv, t_param *param);
+
+void		*observer_routine(void *arg);
 
 void		init_mutex(pthread_mutex_t *mutexes, int amount);
 void		destroy_mutex(pthread_mutex_t *mutexes, int amount);
