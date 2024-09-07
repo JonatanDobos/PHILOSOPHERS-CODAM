@@ -32,9 +32,12 @@ typedef struct s_param
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				max_meals;
-	bool			*death_flag;
+	bool			death_flag;
+	bool			exit_flag;
+	__uint64_t		*states;
 	__uint64_t		start_time;
 	pthread_mutex_t	write_lock;
+	pthread_t		observer;
 }	t_param;
 
 typedef struct s_philosopher

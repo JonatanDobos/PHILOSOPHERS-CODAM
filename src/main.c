@@ -18,78 +18,122 @@ void	take_forks(t_philosopher *philo)
 	}
 }
 
-bool	clean_forks(t_philosopher *philo)
+void	clean_forks(t_philosopher *philo)
 {
 	pthread_mutex_unlock(&philo->forks[philo->r_fork]);
 	pthread_mutex_unlock(&philo->forks[philo->l_fork]);
 }
 
+void	eat(t_philosopher *philo)
+{
+	__uint64_t	time_left;
+
+	if (philo->param->death_flag)
+		return ;
+	time_left = _get_time_ms() + (__uint64_t)(philo->param->time_to_die + philo->param->time_to_eat);
+	philo->param->states[philo->id - 1] = time_left;
+	usleep(philo->param->time_to_eat * 1000);
+	philo->times_eaten++;
+}
+
+void	sleep(t_philosopher *philo)
+{
+	if (philo->param->death_flag)
+		return ;
+	print_action(philo->id, "is sleeping");
+	usleep(philo->param->time_to_sleep * 1000);
+}
+
+void	think(t_philosopher *philo)
+{
+	if (philo->param->death_flag)
+		return ;
+	print_action(philo->id, "is thinking");
+}
+
 void	*routine(void *arg)
 {
 	t_philosopher	*philo;
-	__uint64_t		timestamp;
 
 	philo = (t_philosopher *)arg;
-	while (!philo->param->max_meals
+	while ((!philo->param->max_meals
 			|| philo->times_eaten < philo->param->max_meals)
+			&& !philo->param->death_flag)
 	{
-		timestamp = _get_time_ms();
 		take_forks(philo);
-		usleep(philo->param->time_to_eat * 1000);
-		philo->times_eaten++;
+		eat(philo);
 		clean_forks(philo);
-		print_action(philo->id, "is sleeping");
-		usleep(philo->param->time_to_sleep * 1000);
-		print_action(philo->id, "is thinking");
+		sleep(philo);
+		think(philo);
 	}
 	return (NULL);
+}
+
+bool	create_philo_threads(
+	t_philosopher *phil_data,
+	pthread_mutex_t *forks,
+	t_param *param,
+	pthread_t *philosophers)
+{
+	int	i;
+
+	i = 0;
+	while (i < param->number_of_philosophers)
+	{
+		phil_data[i].forks = forks;
+		init_philosopher_data(&phil_data[i], param, i);
+		if (pthread_create(&philosophers[i], NULL, routine, &phil_data[i]))
+			return (EXIT_FAILURE);
+		++i;
+	}
+	return (EXIT_SUCCESS);
+}
+
+bool	join_philo_threads(pthread_t *philosophers, t_param *param)
+{
+	int	i;
+
+	i = 0;
+	while (i < param->number_of_philosophers)
+	{
+		if (pthread_join(philosophers[i++], NULL) != 0)
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
 
 bool	 setup_threads(t_param *param)
 {
 	pthread_t		philosophers[param->number_of_philosophers];
 	pthread_mutex_t	forks[param->number_of_philosophers];
-	pthread_t		observer;
+	__uint64_t		philo_states[param->number_of_philosophers];
 	t_philosopher	phil_data[param->number_of_philosophers];
-	int				i;
 
 	init_mutex(forks, param->number_of_philosophers);
-	i = 0;
+	param->states = philo_states;
 	param->start_time = _get_time_ms();
-	if (pthread_create(&observer, NULL, observer_routine, param))
+	if (create_philo_threads(phil_data, forks, param, philosophers))
+		return (EXIT_FAILURE);
+	if (pthread_create(&param->observer, NULL, observer_routine, param))
+		return (EXIT_FAILURE);
+	pthread_detach(param->observer);
+	if (join_philo_threads(philosophers, param))
 		return (destroy_mutex(forks, param->number_of_philosophers), 0);
-	while (i < param->number_of_philosophers)
-	{
-		phil_data->forks = forks;
-		init_philosopher_data(&phil_data[i], param, i);
-		if (pthread_create(&philosophers[i], NULL, routine, &phil_data[i]))
-			exit(EXIT_FAILURE);
-		++i;
-	}
-	while (i < param->number_of_philosophers)
-	{
-		if (pthread_join(philosophers[i++], NULL) != 0)
-			return (destroy_mutex(forks, param->number_of_philosophers), 0);
-	}
 	return (destroy_mutex(forks, param->number_of_philosophers), 1);
 }
 
 int	main(int argc, char **argv)
 {
-	t_param			param;
-	pthread_mutex_t	write_lock;
-	bool			death_flag;
+	t_param	param;
 
-	if (argc < 5 || argc > 6 || !input_handling(argc, argv))
+	if (argc < 5 || argc > 6 || !init_parameters(argc, argv, &param))
 	{
 		printf("Syntax Error!\nUsage: %s %s", argv[0], PROMPT);
 		return (EXIT_FAILURE);
 	}
-	death_flag = false;
-	init_mutex(&write_lock, 1);
-	param.write_lock = write_lock;
-	param.death_flag = &death_flag;
+	init_mutex(&param.write_lock, 1);
+	param.death_flag = false;
 	if (!setup_threads(&param))
-		return (destroy_mutex(&write_lock, 1), EXIT_FAILURE);
-	return (destroy_mutex(&write_lock, 1), EXIT_SUCCESS);
+		return (destroy_mutex(&param.write_lock, 1), EXIT_FAILURE);
+	return (destroy_mutex(&param.write_lock, 1), EXIT_SUCCESS);
 }
