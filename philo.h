@@ -52,7 +52,7 @@ typedef struct s_philosopher
 
 int			_atoi(char *str);
 __uint64_t	_get_time_ms(void);
-void		print_action(t_philosopher *philo, char *message);
+void		print_activity(int id, t_param *param, char *message);
 bool		init_parameters(int argc, char **argv, t_param *param);
 
 void		*observer_routine(void *arg);

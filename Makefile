@@ -9,9 +9,9 @@ CC		=	cc -g -fsanitize=address
 
 SRCDIR	=	./src
 SRC		=	$(SRCDIR)/main.c \
-			$(SRCDIR)/utils.c
-			$(SRCDIR)/init.c
-			$(SRCDIR)/observer.c
+			$(SRCDIR)/utils.c \
+			$(SRCDIR)/init.c \
+			$(SRCDIR)/observer.c \
 			$(SRCDIR)/mutex.c
 
 OBJ	=	$(SRC:.c=.o)

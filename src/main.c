@@ -5,16 +5,16 @@ void	take_forks(t_philosopher *philo)
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->forks[philo->r_fork]);
-		print_action(philo, "has taken fork");
+		print_activity(philo->id, philo->param, "has taken fork");
 		pthread_mutex_lock(&philo->forks[philo->l_fork]);
-		print_action(philo, "has taken fork");
+		print_activity(philo->id, philo->param, "has taken fork");
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->forks[philo->l_fork]);
-		print_action(philo, "has taken fork");
+		print_activity(philo->id, philo->param, "has taken fork");
 		pthread_mutex_lock(&philo->forks[philo->r_fork]);
-		print_action(philo, "has taken fork");
+		print_activity(philo->id, philo->param, "has taken fork");
 	}
 }
 
@@ -24,31 +24,31 @@ void	clean_forks(t_philosopher *philo)
 	pthread_mutex_unlock(&philo->forks[philo->l_fork]);
 }
 
-void	eat(t_philosopher *philo)
+void	eating(t_philosopher *philo)
 {
-	__uint64_t	time_left;
+	__uint64_t	tod;
 
 	if (philo->param->death_flag)
 		return ;
-	time_left = _get_time_ms() + (__uint64_t)(philo->param->time_to_die + philo->param->time_to_eat);
-	philo->param->states[philo->id - 1] = time_left;
+	tod = _get_time_ms() + (__uint64_t)(philo->param->time_to_die + philo->param->time_to_eat);
+	philo->param->states[philo->id - 1] = tod;
 	usleep(philo->param->time_to_eat * 1000);
 	philo->times_eaten++;
 }
 
-void	sleep(t_philosopher *philo)
+void	sleeping(t_philosopher *philo)
 {
 	if (philo->param->death_flag)
 		return ;
-	print_action(philo->id, "is sleeping");
+	print_activity(philo->id, philo->param, "is sleeping");
 	usleep(philo->param->time_to_sleep * 1000);
 }
 
-void	think(t_philosopher *philo)
+void	thinking(t_philosopher *philo)
 {
 	if (philo->param->death_flag)
 		return ;
-	print_action(philo->id, "is thinking");
+	print_activity(philo->id, philo->param, "is thinking");
 }
 
 void	*routine(void *arg)
@@ -61,10 +61,10 @@ void	*routine(void *arg)
 			&& !philo->param->death_flag)
 	{
 		take_forks(philo);
-		eat(philo);
+		eating(philo);
 		clean_forks(philo);
-		sleep(philo);
-		think(philo);
+		sleeping(philo);
+		thinking(philo);
 	}
 	return (NULL);
 }
@@ -126,7 +126,7 @@ int	main(int argc, char **argv)
 {
 	t_param	param;
 
-	if (argc < 5 || argc > 6 || !init_parameters(argc, argv, &param))
+	if (argc < 5 || argc > 6 || init_parameters(argc, argv, &param))
 	{
 		printf("Syntax Error!\nUsage: %s %s", argv[0], PROMPT);
 		return (EXIT_FAILURE);
