@@ -1,71 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
+/*   Updated: 2024/09/11 15:07:51 by jdobos        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../philo.h"
-
-void	take_forks(t_philosopher *philo)
-{
-	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(&philo->forks[philo->r_fork]);
-		print_activity(philo->id, philo->param, "has taken fork");
-		pthread_mutex_lock(&philo->forks[philo->l_fork]);
-		print_activity(philo->id, philo->param, "has taken fork");
-	}
-	else
-	{
-		pthread_mutex_lock(&philo->forks[philo->l_fork]);
-		print_activity(philo->id, philo->param, "has taken fork");
-		pthread_mutex_lock(&philo->forks[philo->r_fork]);
-		print_activity(philo->id, philo->param, "has taken fork");
-	}
-}
-
-void	clean_forks(t_philosopher *philo)
-{
-	pthread_mutex_unlock(&philo->forks[philo->r_fork]);
-	pthread_mutex_unlock(&philo->forks[philo->l_fork]);
-}
-
-void	eating(t_philosopher *philo)
-{
-	__uint64_t	tod;
-
-	if (philo->param->death_flag)
-		return ;
-	tod = _get_time_ms() + (__uint64_t)(philo->param->time_to_die + philo->param->time_to_eat);
-	philo->param->states[philo->id - 1] = tod;
-	usleep(philo->param->time_to_eat * 1000);
-	philo->times_eaten++;
-}
-
-void	sleeping(t_philosopher *philo)
-{
-	if (philo->param->death_flag)
-		return ;
-	print_activity(philo->id, philo->param, "is sleeping");
-	usleep(philo->param->time_to_sleep * 1000);
-}
-
-void	thinking(t_philosopher *philo)
-{
-	if (philo->param->death_flag)
-		return ;
-	print_activity(philo->id, philo->param, "is thinking");
-}
 
 void	*routine(void *arg)
 {
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)arg;
-	while ((!philo->param->max_meals
-			|| philo->times_eaten < philo->param->max_meals)
-			&& !philo->param->death_flag)
+	while (!philo->param->death_flag)
 	{
 		take_forks(philo);
 		eating(philo);
 		clean_forks(philo);
+		if (philo->times_eaten == philo->param->max_meals)
+			break ;
 		sleeping(philo);
 		thinking(philo);
 	}
+	philo->param->state[philo->id - 1] = -1;
 	return (NULL);
 }
 
@@ -84,6 +46,7 @@ bool	create_philo_threads(
 		init_philosopher_data(&phil_data[i], param, i);
 		if (pthread_create(&philosophers[i], NULL, routine, &phil_data[i]))
 			return (EXIT_FAILURE);
+		usleep(100);
 		++i;
 	}
 	return (EXIT_SUCCESS);
@@ -102,15 +65,16 @@ bool	join_philo_threads(pthread_t *philosophers, t_param *param)
 	return (EXIT_SUCCESS);
 }
 
-bool	 setup_threads(t_param *param)
+bool	setup_threads(t_param *param)
 {
+	// SHOULD BE MALLOCED, LOOK IN UTILS!
 	pthread_t		philosophers[param->number_of_philosophers];
 	pthread_mutex_t	forks[param->number_of_philosophers];
 	__uint64_t		philo_states[param->number_of_philosophers];
 	t_philosopher	phil_data[param->number_of_philosophers];
 
 	init_mutex(forks, param->number_of_philosophers);
-	param->states = philo_states;
+	param->state = philo_states;
 	param->start_time = _get_time_ms();
 	if (create_philo_threads(phil_data, forks, param, philosophers))
 		return (EXIT_FAILURE);

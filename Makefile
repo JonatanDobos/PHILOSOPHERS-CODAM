@@ -1,6 +1,8 @@
 NAME	=	philo
 
-CC		=	cc -g -fsanitize=address
+CC		=	cc
+
+# CC		=	cc -g -fsanitize=address
 
 # CFLAGS=		-Wall -Wextra -Werror
 
@@ -12,7 +14,8 @@ SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/utils.c \
 			$(SRCDIR)/init.c \
 			$(SRCDIR)/observer.c \
-			$(SRCDIR)/mutex.c
+			$(SRCDIR)/mutex.c \
+			$(SRCDIR)/activities.c
 
 OBJ	=	$(SRC:.c=.o)
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   utils.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/11 14:42:12 by jdobos        #+#    #+#                 */
+/*   Updated: 2024/09/11 15:06:46 by jdobos        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../philo.h"
 
 int	_atoi(char *str)
@@ -28,9 +40,9 @@ __uint64_t	_get_time_ms(void)
 void	print_activity(int id, t_param *param, char *message)
 {
 	const __uint64_t	time = _get_time_ms() - param->start_time;
-	
+
 	pthread_mutex_lock(&param->write_lock);
-	printf("%llu %d %s\n", time, id, message);
+	printf("%05lu %d %s\n", time, id, message);
 	pthread_mutex_unlock(&param->write_lock);
 }
 
@@ -45,7 +57,7 @@ bool	init_parameters(int argc, char **argv, t_param *param)
 {
 	int	i;
 	int	j;
-	
+
 	i = 1;
 	while (i < argc)
 	{
@@ -68,4 +80,9 @@ bool	init_parameters(int argc, char **argv, t_param *param)
 	else
 		param->max_meals = 0;
 	return (0);
+}
+
+bool	malloc_structs()
+{
+	// LEFTOFF!!
 }

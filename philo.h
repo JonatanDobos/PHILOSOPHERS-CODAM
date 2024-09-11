@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   philo.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
+/*   Updated: 2024/09/11 14:59:23 by jdobos        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 # include <stdio.h>
@@ -34,7 +46,7 @@ typedef struct s_param
 	int				max_meals;
 	bool			death_flag;
 	bool			exit_flag;
-	__uint64_t		*states;
+	__uint64_t		*state;
 	__uint64_t		start_time;
 	pthread_mutex_t	write_lock;
 	pthread_t		observer;
@@ -54,6 +66,12 @@ int			_atoi(char *str);
 __uint64_t	_get_time_ms(void);
 void		print_activity(int id, t_param *param, char *message);
 bool		init_parameters(int argc, char **argv, t_param *param);
+
+void		take_forks(t_philosopher *philo);
+void		clean_forks(t_philosopher *philo);
+void		eating(t_philosopher *philo);
+void		sleeping(t_philosopher *philo);
+void		thinking(t_philosopher *philo);
 
 void		*observer_routine(void *arg);
 
