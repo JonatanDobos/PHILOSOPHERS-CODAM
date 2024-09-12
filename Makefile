@@ -15,7 +15,8 @@ SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/init.c \
 			$(SRCDIR)/observer.c \
 			$(SRCDIR)/mutex.c \
-			$(SRCDIR)/activities.c
+			$(SRCDIR)/activities.c \
+			$(SRCDIR)/malloc_and_free.c
 
 OBJ	=	$(SRC:.c=.o)
 

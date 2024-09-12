@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/11 14:59:23 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/09/12 16:07:47 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct timeval	t_tv;
 
 typedef struct s_param
 {
-	int				number_of_philosophers;
+	int				p_amount;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -49,7 +49,6 @@ typedef struct s_param
 	__uint64_t		*state;
 	__uint64_t		start_time;
 	pthread_mutex_t	write_lock;
-	pthread_t		observer;
 }	t_param;
 
 typedef struct s_philosopher
@@ -62,10 +61,22 @@ typedef struct s_philosopher
 	t_param			*param;
 }	t_philosopher;
 
+typedef struct s_main
+{
+	t_param			*param;
+	pthread_t		*philo;
+	pthread_mutex_t	*forks;
+	t_philosopher	*p_data;
+	pthread_t		observer;
+}	t_main;
+
 int			_atoi(char *str);
 __uint64_t	_get_time_ms(void);
 void		print_activity(int id, t_param *param, char *message);
 bool		init_parameters(int argc, char **argv, t_param *param);
+
+bool		malloc_structs(t_main *main);
+void		cleanup(t_main *main);
 
 void		take_forks(t_philosopher *philo);
 void		clean_forks(t_philosopher *philo);

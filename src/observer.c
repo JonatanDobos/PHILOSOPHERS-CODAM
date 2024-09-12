@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:09 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/11 14:42:10 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/09/12 15:59:02 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ void	*observer_routine(void *arg)
 	param = (t_param *)arg;
 	cur_time = _get_time_ms();
 	finished = 0;
-	while (finished < param->number_of_philosophers)
+	while (finished < param->p_amount)
 	{
 		i = 0;
-		while (i < param->number_of_philosophers)
+		while (i < param->p_amount)
 		{
 			if (param->state[i] == -1)
 			{

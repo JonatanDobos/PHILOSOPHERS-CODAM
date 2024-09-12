@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:12 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/11 15:06:46 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/09/12 16:37:56 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	print_activity(int id, t_param *param, char *message)
 	const __uint64_t	time = _get_time_ms() - param->start_time;
 
 	pthread_mutex_lock(&param->write_lock);
-	printf("%05lu %d %s\n", time, id, message);
+	printf("%05llu %d %s\n", time, id, message);
 	pthread_mutex_unlock(&param->write_lock);
 }
 
@@ -68,11 +68,11 @@ bool	init_parameters(int argc, char **argv, t_param *param)
 			return (1);
 		++i;
 	}
-	param->number_of_philosophers = _atoi(argv[1]);
+	param->p_amount = _atoi(argv[1]);
 	param->time_to_die = _atoi(argv[2]);
 	param->time_to_eat = _atoi(argv[3]);
 	param->time_to_sleep = _atoi(argv[4]);
-	if (param->number_of_philosophers < 1 || param->time_to_die < 1
+	if (param->p_amount < 1 || param->time_to_die < 1
 		|| param->time_to_eat < 1 || param->time_to_sleep < 1)
 		return (1);
 	if (argc == 6)
@@ -80,9 +80,4 @@ bool	init_parameters(int argc, char **argv, t_param *param)
 	else
 		param->max_meals = 0;
 	return (0);
-}
-
-bool	malloc_structs()
-{
-	// LEFTOFF!!
 }
