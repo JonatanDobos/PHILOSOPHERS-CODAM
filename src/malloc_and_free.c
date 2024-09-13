@@ -6,7 +6,7 @@
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 15:31:50 by joni          #+#    #+#                 */
-/*   Updated: 2024/09/12 16:05:20 by joni          ########   odam.nl         */
+/*   Updated: 2024/09/13 13:41:37 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ bool	malloc_structs(t_main *main)
 	if (!main->p_data)
 		return (free(main->param->state), free(main->philo), \
 				free(main->p_data), EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 void	cleanup(t_main *main)

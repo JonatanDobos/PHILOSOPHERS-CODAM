@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/12 16:39:27 by joni          ########   odam.nl         */
+/*   Updated: 2024/09/13 13:40:59 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ bool	create_philo_threads(
 	return (EXIT_SUCCESS);
 }
 
-bool	join_philo_threads(pthread_t *philosophers, t_param *param)
+bool	join_threads(
+	pthread_t *observer, pthread_t *philosophers, t_param *param)
 {
 	int	i;
 
@@ -62,6 +63,8 @@ bool	join_philo_threads(pthread_t *philosophers, t_param *param)
 		if (pthread_join(philosophers[i++], NULL) != 0)
 			return (EXIT_FAILURE);
 	}
+	if (pthread_join(*observer, NULL) != 0)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
@@ -74,7 +77,7 @@ bool	setup_threads(t_main *m)
 	if (pthread_create(&m->observer, NULL, observer_routine, m))
 		return (EXIT_FAILURE);
 	pthread_detach(m->observer);
-	if (join_philo_threads(m->philo, m->param))
+	if (join_threads(&m->observer, m->philo, m->param))
 		return (destroy_mutex(m->forks, m->param->p_amount), 0);
 	return (destroy_mutex(m->forks, m->param->p_amount), 1);
 }
