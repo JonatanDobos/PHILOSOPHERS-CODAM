@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/12 16:07:47 by joni          ########   odam.nl         */
+/*   Updated: 2024/09/19 15:16:09 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,15 @@
 # define PROMPT "number_of_philosophers time_to_die time_to_eat \
 				time_to_sleep [number_of_times_each_philosopher_must_eat]\n"
 
-// TEST!
-# define C_RESET "\033[0m"
-# define C_BOLD "\033[1m"
-
 typedef struct timeval	t_tv;
 
 typedef struct s_param
 {
-	int				p_amount;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				max_meals;
+	__uint16_t		p_amount;
+	__uint16_t		time_to_die;
+	__uint16_t		time_to_eat;
+	__uint16_t		time_to_sleep;
+	__uint16_t		max_meals;
 	bool			death_flag;
 	bool			exit_flag;
 	__uint64_t		*state;
