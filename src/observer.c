@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:09 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/12 15:59:02 by joni          ########   odam.nl         */
+/*   Updated: 2024/09/20 12:47:18 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,16 @@ void	*observer_routine(void *arg)
 		{
 			if (param->state[i] == -1)
 			{
+				printf("PHILO %d finished\n", i + 1);//test
 				++finished;
 				param->state[i] = 0;
 			}
 			else if (param->state[i] && _get_time_ms() > param->state[i])
+			{
+				printf("PHILO %d deathtime: %llu, curtime: %llu\n", i + 1, param->state[i], _get_time_ms());
+				printf("PHILO %d dead\n", i + 1);//test
 				death(param, i);
+			}
 			++i;
 		}
 	}

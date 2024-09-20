@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:41:49 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/19 15:08:56 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/09/20 12:43:56 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,5 @@ void	init_philosopher_data(t_philosopher *philo, t_param *param, int i)
 	philo->times_eaten = 0;
 	philo->param->state[i] = _get_time_ms() + (__uint64_t)(param->time_to_die \
 							+ param->time_to_eat + param->time_to_sleep);
+	printf("INIT DEATHTIME: %d: %llu\n", i + 1, philo->param->state[i]);//test
 }

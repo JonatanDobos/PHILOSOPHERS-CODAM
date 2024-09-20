@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/19 13:50:50 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/09/20 12:53:41 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	main(int argc, char **argv)
 	t_main	main;
 	t_param	param;
 	bool	errornum;
+	// LEFTOFF maybe making state array mutex? look at GPT!
 
 	if (argc < 5 || argc > 6 || init_parameters(argc, argv, &param))
 	{

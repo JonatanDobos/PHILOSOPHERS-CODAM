@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:43:37 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/11 14:45:56 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/09/20 12:46:07 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	eating(t_philosopher *philo)
 	tod = _get_time_ms() + (__uint64_t)(philo->param->time_to_die + \
 			philo->param->time_to_eat + philo->param->time_to_sleep);
 	philo->param->state[philo->id - 1] = tod;
+	printf("EAT DEADTIME: %d: %llu\n", philo->id, philo->param->state[philo->id - 1]);//test
 	print_activity(philo->id, philo->param, "is eating");
 	usleep(philo->param->time_to_eat * 1000);
 	philo->times_eaten++;
