@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/20 12:53:41 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/09/26 14:56:54 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ bool	setup_threads(t_main *m)
 		return (EXIT_FAILURE);
 	if (pthread_create(&m->observer, NULL, observer_routine, m))
 		return (EXIT_FAILURE);
-	pthread_detach(m->observer);
 	if (join_threads(&m->observer, m->philo, m->param))
 		return (destroy_mutex(m->forks, m->param->p_amount), 0);
 	return (destroy_mutex(m->forks, m->param->p_amount), 1);
