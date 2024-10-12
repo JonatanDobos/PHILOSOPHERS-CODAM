@@ -12,9 +12,10 @@ CC		=	cc
 SRCDIR	=	./src
 SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/utils.c \
+			$(SRCDIR)/utils_print.c \
 			$(SRCDIR)/init.c \
 			$(SRCDIR)/observer.c \
-			$(SRCDIR)/mutex.c \
+			$(SRCDIR)/utils_pthread.c \
 			$(SRCDIR)/activities.c \
 			$(SRCDIR)/malloc_and_free.c
 

@@ -6,13 +6,13 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:12 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/12 16:37:56 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/12 23:04:57 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int	_atoi(char *str)
+static int	p_atoi(char *str)
 {
 	int	i;
 	int	ret;
@@ -29,7 +29,7 @@ int	_atoi(char *str)
 	return (ret);
 }
 
-__uint64_t	_get_time_ms(void)
+__uint64_t	get_time_ms(void)
 {
 	t_tv	tv;
 
@@ -37,16 +37,7 @@ __uint64_t	_get_time_ms(void)
 	return ((tv.tv_sec * (__uint64_t)1000) + (tv.tv_usec / (__uint64_t)1000));
 }
 
-void	print_activity(int id, t_param *param, char *message)
-{
-	const __uint64_t	time = _get_time_ms() - param->start_time;
-
-	pthread_mutex_lock(&param->write_lock);
-	printf("%05llu %d %s\n", time, id, message);
-	pthread_mutex_unlock(&param->write_lock);
-}
-
-bool	_isdigit(char c)
+static bool	p_isdigit(char c)
 {
 	if (c >= '0' && c <= '9')
 		return (true);
@@ -62,22 +53,32 @@ bool	init_parameters(int argc, char **argv, t_param *param)
 	while (i < argc)
 	{
 		j = 0;
-		while (argv[i][j] && _isdigit(argv[i][j]))
+		while (argv[i][j] && p_isdigit(argv[i][j]))
 			++j;
 		if (argv[i][j] != '\0')
 			return (1);
 		++i;
 	}
-	param->p_amount = _atoi(argv[1]);
-	param->time_to_die = _atoi(argv[2]);
-	param->time_to_eat = _atoi(argv[3]);
-	param->time_to_sleep = _atoi(argv[4]);
+	param->p_amount = p_atoi(argv[1]);
+	param->time_to_die = p_atoi(argv[2]);
+	param->time_to_eat = p_atoi(argv[3]);
+	param->time_to_sleep = p_atoi(argv[4]);
 	if (param->p_amount < 1 || param->time_to_die < 1
 		|| param->time_to_eat < 1 || param->time_to_sleep < 1)
 		return (1);
 	if (argc == 6)
-		param->max_meals = _atoi(argv[5]);
+		param->max_meals = p_atoi(argv[5]);
 	else
 		param->max_meals = 0;
 	return (0);
+}
+
+bool	check_input(t_main *m, int argc, char **argv)
+{
+	if (argc < 5 || argc > 6 || init_parameters(argc, argv, &m->param))
+	{
+		printf("Syntax Error!\nUsage: %s %s", argv[0], PROMPT);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }

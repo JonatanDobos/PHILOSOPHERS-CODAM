@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:43:37 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/20 12:46:07 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/12 23:13:33 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,23 @@ void	take_forks(t_philosopher *philo)
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->forks[philo->r_fork]);
+		if (philo->param->death_flag)
+			return ;
 		print_activity(philo->id, philo->param, "has taken fork");
 		pthread_mutex_lock(&philo->forks[philo->l_fork]);
+		if (philo->param->death_flag)
+			return ;
 		print_activity(philo->id, philo->param, "has taken fork");
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->forks[philo->l_fork]);
+		if (philo->param->death_flag)
+			return ;
 		print_activity(philo->id, philo->param, "has taken fork");
 		pthread_mutex_lock(&philo->forks[philo->r_fork]);
+		if (philo->param->death_flag)
+			return ;
 		print_activity(philo->id, philo->param, "has taken fork");
 	}
 }
@@ -38,14 +46,11 @@ void	clean_forks(t_philosopher *philo)
 
 void	eating(t_philosopher *philo)
 {
-	__uint64_t	tod;
-
 	if (philo->param->death_flag)
 		return ;
-	tod = _get_time_ms() + (__uint64_t)(philo->param->time_to_die + \
+	philo->time_of_death = get_time_ms() + \
+			(__uint64_t)(philo->param->time_to_die + \
 			philo->param->time_to_eat + philo->param->time_to_sleep);
-	philo->param->state[philo->id - 1] = tod;
-	printf("EAT DEADTIME: %d: %llu\n", philo->id, philo->param->state[philo->id - 1]);//test
 	print_activity(philo->id, philo->param, "is eating");
 	usleep(philo->param->time_to_eat * 1000);
 	philo->times_eaten++;

@@ -6,36 +6,29 @@
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 15:31:50 by joni          #+#    #+#                 */
-/*   Updated: 2024/09/19 15:09:28 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/12 23:01:12 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-bool	malloc_structs(t_main *main)
+bool	malloc_structs(t_main *m)
 {
-	const int	num = main->param->p_amount;
+	const int	num = m->param.p_amount;
 
-	main->param->state = (__uint64_t *)malloc(sizeof(__uint64_t) * num);
-	if (!main->param->state)
-		return (EXIT_FAILURE);
-	main->philo = (pthread_t *)malloc(sizeof(pthread_t) * num);
-	if (!main->philo)
-		return (free(main->param->state), EXIT_FAILURE);
-	main->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * num);
-	if (!main->forks)
-		return (free(main->param->state), free(main->philo), EXIT_FAILURE);
-	main->p_data = (t_philosopher *)malloc(sizeof(t_philosopher) * num);
-	if (!main->p_data)
-		return (free(main->param->state), free(main->philo), \
-				free(main->p_data), EXIT_FAILURE);
+	m->philo = (t_philosopher *)malloc(sizeof(t_philosopher) * num);
+	if (!m->philo)
+		return (save_errno(errno), cleanup(m), EXIT_FAILURE);
+	m->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * num);
+	if (!m->forks)
+		return (save_errno(errno), cleanup(m), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
-void	cleanup(t_main *main)
+void	cleanup(t_main *m)
 {
-	free(main->forks);
-	free(main->p_data);
-	free(main->philo);
-	free(main->param->state);
+	if (m->forks)
+		free(m->forks);
+	if (m->philo)
+		free(m->philo);
 }
