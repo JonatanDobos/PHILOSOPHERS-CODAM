@@ -9,3 +9,5 @@ TODO:
 
 - protect (eg.: gettimeofday())
 - TEST!
+
+VALGRIND CHECK!: [valgrind --tool=helgrind ./philo]
