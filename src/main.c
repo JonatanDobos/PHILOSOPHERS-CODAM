@@ -6,13 +6,13 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/09/26 14:56:54 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/12 23:10:49 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	*routine(void *arg)
+void	*philo_routine(void *arg)
 {
 	t_philosopher	*philo;
 
@@ -27,81 +27,39 @@ void	*routine(void *arg)
 		sleeping(philo);
 		thinking(philo);
 	}
-	philo->param->state[philo->id - 1] = -1;
+	philo->time_of_death = -1;
 	return (NULL);
 }
 
-bool	create_philo_threads(
-	t_philosopher *phil_data,
-	pthread_mutex_t *forks,
-	t_param *param,
-	pthread_t *philosophers)
+static bool	dinner_time(t_main *m)
 {
-	int	i;
-
-	i = 0;
-	while (i < param->p_amount)
-	{
-		phil_data[i].forks = forks;
-		init_philosopher_data(&phil_data[i], param, i);
-		if (pthread_create(&philosophers[i], NULL, routine, &phil_data[i]))
-			return (EXIT_FAILURE);
-		usleep(100);
-		++i;
-	}
-	return (EXIT_SUCCESS);
-}
-
-bool	join_threads(
-	pthread_t *observer, pthread_t *philosophers, t_param *param)
-{
-	int	i;
-
-	i = 0;
-	while (i < param->p_amount)
-	{
-		if (pthread_join(philosophers[i++], NULL) != 0)
-			return (EXIT_FAILURE);
-	}
-	if (pthread_join(*observer, NULL) != 0)
+	if (init_mutex(m->forks, m->param.p_amount))
 		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
-
-bool	setup_threads(t_main *m)
-{
-	init_mutex(m->forks, m->param->p_amount);
-	m->param->start_time = _get_time_ms();
-	if (create_philo_threads(m->p_data, m->forks, m->param, m->philo))
-		return (EXIT_FAILURE);
-	if (pthread_create(&m->observer, NULL, observer_routine, m))
-		return (EXIT_FAILURE);
-	if (join_threads(&m->observer, m->philo, m->param))
-		return (destroy_mutex(m->forks, m->param->p_amount), 0);
-	return (destroy_mutex(m->forks, m->param->p_amount), 1);
+	m->param.start_time = get_time_ms();
+	if (create_philo_threads(m->philo, m->forks, &m->param))
+		return (cleanup(m), EXIT_FAILURE);
+	observer_routine(m);
+	if (join_threads(m->philo, m->param.p_amount))
+		return (destroy_mutex(m->forks, m->param.p_amount), 1);
+	return (destroy_mutex(m->forks, m->param.p_amount));
 }
 
 int	main(int argc, char **argv)
 {
-	t_main	main;
-	t_param	param;
-	bool	errornum;
+	t_main	m;
 	// LEFTOFF maybe making state array mutex? look at GPT!
 
-	if (argc < 5 || argc > 6 || init_parameters(argc, argv, &param))
-	{
-		printf("Syntax Error!\nUsage: %s %s", argv[0], PROMPT);
-		return (EXIT_FAILURE);
-	}
-	init_mutex(&param.write_lock, 1);
-	param.death_flag = false;
-	main.param = &param;
-	if (malloc_structs(&main))
-		return (EXIT_FAILURE);
-	errornum = setup_threads(&main);
-	destroy_mutex(&param.write_lock, 1);
-	cleanup(&main);
-	if (errornum)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	save_errno(0);
+	if (check_input(&m, argc, argv))
+		return (EINVAL);
+	safety_init(&m);
+	if (init_mutex(&m.param.write_lock, 1))
+		return (save_errno(SAVED_ERRNO));
+	m.param.death_flag = false;
+	if (malloc_structs(&m))
+		return (save_errno(SAVED_ERRNO));
+	dinner_time(&m);
+	cleanup(&m);
+	destroy_mutex(&m.param.write_lock, 1);
+	return (save_errno(SAVED_ERRNO));
 }
