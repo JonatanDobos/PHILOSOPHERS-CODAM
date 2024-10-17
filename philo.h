@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/12 23:10:42 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/17 16:28:28 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,46 @@
 # include <string.h>
 # include <stdlib.h>
 # include <stdarg.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 # include <limits.h>
 # include <sys/wait.h>
 # include <sys/time.h>
 # include <errno.h>
-# include <fcntl.h>
 # include <stdbool.h>
 # include <termios.h>
 # include <pthread.h>
 
-# define PROMPT "number_of_philosophers time_to_die time_to_eat \
-				time_to_sleep [number_of_times_each_philosopher_must_eat]\n"
+# define PROMPT "Syntax Error! correct usage:\n./philo \
+[number_of_philosophers] [time_to_die] [time_to_eat] \
+[time_to_sleep] [number_of_times_each_philosopher_must_eat](optional)\n\
+philosophers min: 60  max: 200\n"
+
+# ifndef EXPLICIT_RULES
+#  define EXPLICIT_RULES true
+# endif
+
+// # ifndef PRINT_COLOR
+// #  define PRINT_COLOR false
+// # endif
 
 enum	e_error
 {
-	SAVED_ERRNO = -1
+	GET_SAVED_ERRNO = -1
+};
+
+enum	e_finish_state
+{
+	JUST_FINISHED,
+	FINISHED,
+	EATING
+};
+
+enum	e_action
+{
+	EAT = 0,
+	SLEEP,
+	THINK,
+	FORK,
+	DIED
 };
 
 typedef struct timeval	t_tv;
@@ -59,6 +82,7 @@ typedef struct s_philosopher
 	int				l_fork;
 	int				r_fork;
 	int				times_eaten;
+	short			finished;
 	__uint64_t		time_of_death;
 	pthread_mutex_t	*forks;
 	t_param			*param;
@@ -81,7 +105,7 @@ bool		check_input(t_main *m, int argc, char **argv);
 
 // utils_print.c
 int			save_errno(int new_errno);
-void		print_activity(int id, t_param *param, char *message);
+void		print_activity(int id, t_param *param, short activity);
 
 // malloc_and_free.c
 bool		malloc_structs(t_main *main);
@@ -101,7 +125,7 @@ void		observer_routine(t_main *m);
 bool		init_mutex(pthread_mutex_t *mutexes, int amount);
 bool		destroy_mutex(pthread_mutex_t *mutexes, int amount);
 bool		create_philo_threads(
-	t_philosopher *philo, pthread_mutex_t *forks, t_param *param);
+			t_philosopher *philo, pthread_mutex_t *forks, t_param *param);
 bool		join_threads(t_philosopher *philos, int amount);
 
 // init.c

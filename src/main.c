@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/12 23:10:49 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/17 16:19:50 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	*philo_routine(void *arg)
 		sleeping(philo);
 		thinking(philo);
 	}
-	philo->time_of_death = -1;
+	philo->finished = JUST_FINISHED;
 	return (NULL);
 }
 
@@ -47,19 +47,18 @@ static bool	dinner_time(t_main *m)
 int	main(int argc, char **argv)
 {
 	t_main	m;
-	// LEFTOFF maybe making state array mutex? look at GPT!
 
 	save_errno(0);
 	if (check_input(&m, argc, argv))
 		return (EINVAL);
 	safety_init(&m);
 	if (init_mutex(&m.param.write_lock, 1))
-		return (save_errno(SAVED_ERRNO));
+		return (save_errno(GET_SAVED_ERRNO));
 	m.param.death_flag = false;
 	if (malloc_structs(&m))
-		return (save_errno(SAVED_ERRNO));
+		return (save_errno(GET_SAVED_ERRNO));
 	dinner_time(&m);
 	cleanup(&m);
 	destroy_mutex(&m.param.write_lock, 1);
-	return (save_errno(SAVED_ERRNO));
+	return (save_errno(GET_SAVED_ERRNO));
 }

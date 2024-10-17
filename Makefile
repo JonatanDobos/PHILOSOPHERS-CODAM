@@ -4,10 +4,7 @@ CC		=	cc
 
 # CC		=	cc -g -fsanitize=address
 
-# CFLAGS=		-Wall -Wextra -Werror
-
-# SRCDIR	=	./test_env_src
-# SRC	=	$(SRCDIR)/main.c
+CFLAGS=		-Wall -Wextra -Werror
 
 SRCDIR	=	./src
 SRC		=	$(SRCDIR)/main.c \
@@ -21,7 +18,19 @@ SRC		=	$(SRCDIR)/main.c \
 
 OBJ	=	$(SRC:.c=.o)
 
-all: $(NAME)
+ifeq ($(filter no_rules,$(MAKECMDGOALS)),no_rules)
+	CFLAGS += -D EXPLICIT_RULES=false
+endif
+
+# ifeq ($(filter color,$(MAKECMDGOALS)),debug)
+# 	CFLAGS += -D DEBUG=true
+# endif
+
+all: $(NAME) 
+
+no_rules: all
+
+debug: all
 
 $(NAME): $(OBJ)
 	$(CC) $(OBJ) $(LDFLAGS) -o $(NAME)
