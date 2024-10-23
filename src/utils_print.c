@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/17 16:30:45 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/17 16:31:06 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/23 13:06:33 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@ int	save_errno(int new_errno)
 
 void	print_activity(int id, t_param *param, short activity)
 {
-	const __uint64_t	time = get_time_ms() - param->start_time;
-	const char			output[5][15] = {"is eating", "is sleeping", \
-							"is thinking", "has taken fork", "died"};
+	__uint64_t	time;
+	const char	output[5][15] = {"is eating", "is sleeping", \
+		"is thinking", "has taken fork", "died"};
 
 	// implement color for easier debugging?
 	pthread_mutex_lock(&param->write_lock);
-	printf("%5lu  %-3d %s\n", time, id, output[activity]);
+	time = get_time_ms() - param->start_time;
+	printf("%5llu  %-3d %s\n", time, id, output[activity]);
 	pthread_mutex_unlock(&param->write_lock);
 }
