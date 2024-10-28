@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:41:49 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/17 15:26:33 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/28 16:45:06 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	init_philosopher_data(t_philosopher *philo, t_param *param, int i)
 	philo->param = param;
 	philo->times_eaten = 0;
 	philo->finished = false;
-	philo->time_of_death = get_time_ms() + (__uint64_t)(param->time_to_die \
-							+ param->time_to_eat + param->time_to_sleep);
+	philo->time_of_death = get_time_ms() + (__uint64_t)(param->time_to_die);
 }
 
 void	safety_init(t_main *main)

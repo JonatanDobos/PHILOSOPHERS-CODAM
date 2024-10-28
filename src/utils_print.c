@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/17 16:30:45 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/23 13:06:33 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/28 16:56:18 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	print_activity(int id, t_param *param, short activity)
 	// implement color for easier debugging?
 	pthread_mutex_lock(&param->write_lock);
 	time = get_time_ms() - param->start_time;
-	printf("%5llu  %-3d %s\n", time, id, output[activity]);
+	// printf("%5lu  %-3d %s\n", time, id, output[activity]);
+	printf("%lu %d %s\n", time, id, output[activity]);
 	pthread_mutex_unlock(&param->write_lock);
 }

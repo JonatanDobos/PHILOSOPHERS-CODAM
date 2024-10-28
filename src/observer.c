@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:09 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/17 16:29:23 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/28 16:49:05 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	observer_routine(t_main *m)
 				++finished;
 				m->philo[i].finished = FINISHED;
 			}
-			else if (m->philo[i].finished == EATING
+			else if (m->philo[i].finished == DINING
 				&& get_time_ms() > m->philo[i].time_of_death)
 			{
 				death(&m->param, i);

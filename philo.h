@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/17 16:28:28 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/28 16:49:05 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ enum	e_finish_state
 {
 	JUST_FINISHED,
 	FINISHED,
-	EATING
+	DINING
 };
 
 enum	e_action
