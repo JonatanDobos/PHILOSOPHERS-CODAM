@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/28 16:49:05 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/29 14:13:52 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,7 @@
 # define PROMPT "Syntax Error! correct usage:\n./philo \
 [number_of_philosophers] [time_to_die] [time_to_eat] \
 [time_to_sleep] [number_of_times_each_philosopher_must_eat](optional)\n\
-philosophers min: 60  max: 200\n"
-
-# ifndef EXPLICIT_RULES
-#  define EXPLICIT_RULES true
-# endif
-
-// # ifndef PRINT_COLOR
-// #  define PRINT_COLOR false
-// # endif
+Values lower than 1 not allowed!"
 
 enum	e_error
 {

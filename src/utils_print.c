@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/17 16:30:45 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/28 16:56:18 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/29 14:10:42 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,8 @@ void	print_activity(int id, t_param *param, short activity)
 	const char	output[5][15] = {"is eating", "is sleeping", \
 		"is thinking", "has taken fork", "died"};
 
-	// implement color for easier debugging?
 	pthread_mutex_lock(&param->write_lock);
 	time = get_time_ms() - param->start_time;
-	// printf("%5lu  %-3d %s\n", time, id, output[activity]);
-	printf("%lu %d %s\n", time, id, output[activity]);
+	printf("%llu %d %s\n", time, id, output[activity]);
 	pthread_mutex_unlock(&param->write_lock);
 }

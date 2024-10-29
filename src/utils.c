@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:12 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/17 16:30:09 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/29 14:12:55 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,22 @@ static bool	p_isdigit(char c)
 
 bool	init_parameters(int argc, char **argv, t_param *param)
 {
+	int	tmp;
+
 	param->p_amount = p_atoi(argv[1]);
 	param->time_to_die = p_atoi(argv[2]);
 	param->time_to_eat = p_atoi(argv[3]);
 	param->time_to_sleep = p_atoi(argv[4]);
 	if (param->p_amount < 1 || param->time_to_die < 1
-		|| param->time_to_eat < 1 || param->time_to_sleep < 1
-		|| (EXPLICIT_RULES && (param->p_amount > 200
-				|| param->p_amount < 60)))
+		|| param->time_to_eat < 1 || param->time_to_sleep < 1)
 		return (EXIT_FAILURE);
 	if (argc == 6)
-		param->max_meals = p_atoi(argv[5]);
+	{
+		tmp = p_atoi(argv[5]);
+		if (tmp == 0)
+			return (EXIT_FAILURE);
+		param->max_meals = tmp;
+	}
 	else
 		param->max_meals = 0;
 	return (EXIT_SUCCESS);
