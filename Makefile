@@ -9,6 +9,7 @@ CFLAGS=		-Wall -Wextra -Werror
 SRCDIR	=	./src
 SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/utils.c \
+			$(SRCDIR)/input_handling.c \
 			$(SRCDIR)/utils_print.c \
 			$(SRCDIR)/init.c \
 			$(SRCDIR)/observer.c \

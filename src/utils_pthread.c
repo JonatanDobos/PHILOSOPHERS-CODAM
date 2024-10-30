@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:06 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/12 23:09:33 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/30 11:25:50 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ bool	create_philo_threads(
 		init_philosopher_data(&philo[i], param, i);
 		if (pthread_create(&philo[i].thread, NULL, philo_routine, &philo[i]))
 			return (EXIT_FAILURE);
-		usleep(42);
+		usleep_interval(param, 42);
 		++i;
 	}
 	return (EXIT_SUCCESS);

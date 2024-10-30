@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/29 14:13:52 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/30 11:18:45 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ typedef struct s_param
 	bool			exit_flag;
 	__uint64_t		start_time;
 	pthread_mutex_t	write_lock;
-	// pthread_mutex_t	state_lock;
 }	t_param;
 
 typedef struct s_philosopher
@@ -90,10 +89,13 @@ typedef struct s_main
 // main.c
 void		*philo_routine(void *arg);
 
-// utils.c
-__uint64_t	get_time_ms(void);
+// input_handling.c
 bool		init_parameters(int argc, char **argv, t_param *param);
 bool		check_input(t_main *m, int argc, char **argv);
+
+// utils.c
+__uint64_t	get_time_ms(void);
+int			usleep_interval(t_param *param, __uint64_t time_to_sleep);
 
 // utils_print.c
 int			save_errno(int new_errno);

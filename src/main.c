@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/17 16:19:50 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/30 11:33:52 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	main(int argc, char **argv)
 	if (malloc_structs(&m))
 		return (save_errno(GET_SAVED_ERRNO));
 	dinner_time(&m);
+	printf("P_amount: %d\nto_die: %d\nto_eat: %d\nto_sleep: %d\n", m.param.p_amount, m.param.time_to_die, m.param.time_to_eat, m.param.time_to_sleep);
 	cleanup(&m);
 	destroy_mutex(&m.param.write_lock, 1);
 	return (save_errno(GET_SAVED_ERRNO));
