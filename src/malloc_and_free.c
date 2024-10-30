@@ -6,7 +6,7 @@
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 15:31:50 by joni          #+#    #+#                 */
-/*   Updated: 2024/10/12 23:01:12 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/30 16:04:32 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ bool	malloc_structs(t_main *m)
 
 void	cleanup(t_main *m)
 {
+	destroy_mutex(m->forks, m->param.p_amount);
+	destroy_mutex(m->param.mutex, 3);
 	if (m->forks)
 		free(m->forks);
 	if (m->philo)

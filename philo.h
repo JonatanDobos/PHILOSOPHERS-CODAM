@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/30 11:18:45 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/30 16:10:31 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,22 @@ Values lower than 1 not allowed!"
 
 enum	e_error
 {
-	GET_SAVED_ERRNO = -1
+	RETURN_SAVED_ERRNO = -1
 };
 
 enum	e_finish_state
 {
-	JUST_FINISHED,
+	JUST_FINISHED = 0,
 	FINISHED,
 	DINING
+};
+
+enum	e_mutex
+{
+	WRITE = 0,
+	DEATH_FLAG,
+	DEATH_TIME,
+	FINISH
 };
 
 enum	e_action
@@ -51,19 +59,22 @@ enum	e_action
 	DIED
 };
 
+typedef unsigned int	t_uint;
+
+typedef unsigned long	t_ulong;
+
 typedef struct timeval	t_tv;
 
 typedef struct s_param
 {
-	__uint16_t		p_amount;
-	__uint16_t		time_to_die;
-	__uint16_t		time_to_eat;
-	__uint16_t		time_to_sleep;
-	__uint16_t		max_meals;
+	t_uint			p_amount;
+	t_uint			time_to_die;
+	t_uint			time_to_eat;
+	t_uint			time_to_sleep;
+	t_uint			max_meals;
 	bool			death_flag;
-	bool			exit_flag;
-	__uint64_t		start_time;
-	pthread_mutex_t	write_lock;
+	t_ulong			start_time;
+	pthread_mutex_t	mutex[4];
 }	t_param;
 
 typedef struct s_philosopher
@@ -72,9 +83,9 @@ typedef struct s_philosopher
 	int				id;
 	int				l_fork;
 	int				r_fork;
-	int				times_eaten;
+	t_uint			times_eaten;
 	short			finished;
-	__uint64_t		time_of_death;
+	t_ulong			time_of_death;
 	pthread_mutex_t	*forks;
 	t_param			*param;
 }	t_philosopher;
@@ -94,8 +105,9 @@ bool		init_parameters(int argc, char **argv, t_param *param);
 bool		check_input(t_main *m, int argc, char **argv);
 
 // utils.c
-__uint64_t	get_time_ms(void);
-int			usleep_interval(t_param *param, __uint64_t time_to_sleep);
+t_ulong		get_time_ms(void);
+void		usleep_interval(t_param *param, t_ulong time_to_sleep);
+bool		death_check(t_param *param);
 
 // utils_print.c
 int			save_errno(int new_errno);
@@ -113,14 +125,14 @@ void		sleeping(t_philosopher *philo);
 void		thinking(t_philosopher *philo);
 
 // observer.c
-void		observer_routine(t_main *m);
+void		monitor(t_main *m);
 
 // utils_pthread.c
-bool		init_mutex(pthread_mutex_t *mutexes, int amount);
-bool		destroy_mutex(pthread_mutex_t *mutexes, int amount);
-bool		create_philo_threads(
-			t_philosopher *philo, pthread_mutex_t *forks, t_param *param);
-bool		join_threads(t_philosopher *philos, int amount);
+int			init_mutex(pthread_mutex_t *mutexes, t_uint amount);
+int			destroy_mutex(pthread_mutex_t *mutexes, t_uint amount);
+int			create_philo_threads(
+				t_philosopher *philo, pthread_mutex_t *forks, t_param *param);
+int			join_threads(t_philosopher *philos, t_uint amount);
 
 // init.c
 void		init_philosopher_data(t_philosopher *philo, t_param *param, int i);

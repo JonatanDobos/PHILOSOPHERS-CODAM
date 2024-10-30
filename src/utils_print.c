@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/17 16:30:45 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/29 14:10:42 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/30 13:13:48 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ int	save_errno(int new_errno)
 
 void	print_activity(int id, t_param *param, short activity)
 {
-	__uint64_t	time;
-	const char	output[5][15] = {"is eating", "is sleeping", \
-		"is thinking", "has taken fork", "died"};
+	t_ulong	time;
+	const char	output[5][17] = {"is eating", "is sleeping", \
+		"is thinking", "has taken a fork", "died"};
 
-	pthread_mutex_lock(&param->write_lock);
+	pthread_mutex_lock(&param->mutex[WRITE]);
 	time = get_time_ms() - param->start_time;
-	printf("%llu %d %s\n", time, id, output[activity]);
-	pthread_mutex_unlock(&param->write_lock);
+	printf("%lu %d %s\n", time, id, output[activity]);
+	pthread_mutex_unlock(&param->mutex[WRITE]);
 }

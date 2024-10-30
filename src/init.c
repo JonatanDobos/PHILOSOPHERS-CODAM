@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:41:49 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/28 16:45:06 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/30 13:16:11 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,12 @@ void	init_philosopher_data(t_philosopher *philo, t_param *param, int i)
 	philo->r_fork = (i + 1) % param->p_amount;
 	philo->param = param;
 	philo->times_eaten = 0;
-	philo->finished = false;
-	philo->time_of_death = get_time_ms() + (__uint64_t)(param->time_to_die);
+	philo->finished = DINING;
+	philo->time_of_death = get_time_ms() + (t_ulong)(param->time_to_die);
 }
 
 void	safety_init(t_main *main)
 {
-	main->param.exit_flag = false;
 	main->param.death_flag = false;
 	main->param.start_time = 0;
 	main->philo = NULL;

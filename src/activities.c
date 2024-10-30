@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:43:37 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/30 11:23:28 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/30 16:04:51 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,22 @@ void	take_forks(t_philosopher *philo)
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->forks[philo->r_fork]);
-		if (philo->param->death_flag)
+		if (death_check(philo->param))
 			return ;
 		print_activity(philo->id, philo->param, FORK);
 		pthread_mutex_lock(&philo->forks[philo->l_fork]);
-		if (philo->param->death_flag)
+		if (death_check(philo->param))
 			return ;
 		print_activity(philo->id, philo->param, FORK);
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->forks[philo->l_fork]);
-		if (philo->param->death_flag)
+		if (death_check(philo->param))
 			return ;
 		print_activity(philo->id, philo->param, FORK);
 		pthread_mutex_lock(&philo->forks[philo->r_fork]);
-		if (philo->param->death_flag)
+		if (death_check(philo->param))
 			return ;
 		print_activity(philo->id, philo->param, FORK);
 	}
@@ -46,18 +46,22 @@ void	clean_forks(t_philosopher *philo)
 
 void	eating(t_philosopher *philo)
 {
-	if (philo->param->death_flag)
+	if (death_check(philo->param))
 		return ;
+	pthread_mutex_lock(&philo->param->mutex[DEATH_FLAG]);
 	philo->time_of_death = get_time_ms() + \
-			(__uint64_t)(philo->param->time_to_die);
+			(t_ulong)(philo->param->time_to_die);
+	pthread_mutex_unlock(&philo->param->mutex[DEATH_FLAG]);
 	print_activity(philo->id, philo->param, EAT);
 	usleep_interval(philo->param, philo->param->time_to_eat * 1000);
+	pthread_mutex_lock(&philo->param->mutex[DEATH_FLAG]);
 	philo->times_eaten++;
+	pthread_mutex_unlock(&philo->param->mutex[DEATH_FLAG]);
 }
 
 void	sleeping(t_philosopher *philo)
 {
-	if (philo->param->death_flag)
+	if (death_check(philo->param))
 		return ;
 	print_activity(philo->id, philo->param, SLEEP);
 	usleep_interval(philo->param, philo->param->time_to_sleep * 1000);
@@ -65,7 +69,7 @@ void	sleeping(t_philosopher *philo)
 
 void	thinking(t_philosopher *philo)
 {
-	if (philo->param->death_flag)
+	if (death_check(philo->param))
 		return ;
 	print_activity(philo->id, philo->param, THINK);
 }

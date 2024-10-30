@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/30 11:33:52 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/30 16:06:48 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ void	*philo_routine(void *arg)
 	return (NULL);
 }
 
-static bool	dinner_time(t_main *m)
+static int	dinner_time(t_main *m)
 {
 	if (init_mutex(m->forks, m->param.p_amount))
-		return (EXIT_FAILURE);
+		return (save_errno(errno));
 	m->param.start_time = get_time_ms();
 	if (create_philo_threads(m->philo, m->forks, &m->param))
 		return (cleanup(m), EXIT_FAILURE);
-	observer_routine(m);
+	monitor(m);
 	if (join_threads(m->philo, m->param.p_amount))
 		return (destroy_mutex(m->forks, m->param.p_amount), 1);
 	return (destroy_mutex(m->forks, m->param.p_amount));
@@ -52,14 +52,11 @@ int	main(int argc, char **argv)
 	if (check_input(&m, argc, argv))
 		return (EINVAL);
 	safety_init(&m);
-	if (init_mutex(&m.param.write_lock, 1))
-		return (save_errno(GET_SAVED_ERRNO));
-	m.param.death_flag = false;
+	if (init_mutex(m.param.mutex, 3))
+		return (save_errno(RETURN_SAVED_ERRNO));
 	if (malloc_structs(&m))
-		return (save_errno(GET_SAVED_ERRNO));
+		return (save_errno(RETURN_SAVED_ERRNO));
 	dinner_time(&m);
-	printf("P_amount: %d\nto_die: %d\nto_eat: %d\nto_sleep: %d\n", m.param.p_amount, m.param.time_to_die, m.param.time_to_eat, m.param.time_to_sleep);
 	cleanup(&m);
-	destroy_mutex(&m.param.write_lock, 1);
-	return (save_errno(GET_SAVED_ERRNO));
+	return (save_errno(RETURN_SAVED_ERRNO));
 }
