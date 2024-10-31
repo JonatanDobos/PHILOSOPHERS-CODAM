@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/31 13:17:39 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/31 16:53:13 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,7 @@ enum	e_action
 };
 
 typedef unsigned int	t_uint;
-
 typedef unsigned long	t_ulong;
-
 typedef struct timeval	t_tv;
 
 typedef struct s_param

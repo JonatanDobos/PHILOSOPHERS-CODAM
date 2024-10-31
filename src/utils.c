@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:12 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/31 00:55:05 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/31 17:34:12 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_ulong	get_time_ms(void)
 	t_tv	tv;
 
 	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * (t_ulong)1000) + (tv.tv_usec / (t_ulong)1000));
+	return ((tv.tv_sec * 1000L) + (tv.tv_usec / 1000L));
 }
 
 void	usleep_interval(t_param *param, t_ulong time_to_sleep)
@@ -26,13 +26,13 @@ void	usleep_interval(t_param *param, t_ulong time_to_sleep)
 	t_ulong	time_in_us;
 
 	gettimeofday(&tv, NULL);
-	time_in_us = ((tv.tv_sec % 100000) * 1000000) + tv.tv_usec;
+	time_in_us = ((tv.tv_sec % 100000L) * 1000000L) + tv.tv_usec;
 	time_to_sleep += time_in_us;
 	while (time_in_us < time_to_sleep && !death_check(param))
 	{
 		usleep(param->sleep_time_us);
 		gettimeofday(&tv, NULL);
-		time_in_us = ((tv.tv_sec % 100000) * 1000000) + tv.tv_usec;
+		time_in_us = ((tv.tv_sec % 100000L) * 1000000L) + tv.tv_usec;
 	}
 }
 
@@ -58,7 +58,7 @@ int	save_errno(int new_errno)
 
 void	print_activity(int id, t_param *param, short activity)
 {
-	t_ulong	time;
+	t_ulong		time;
 	const char	output[5][17] = {"is eating", "is sleeping", \
 		"is thinking", "has taken a fork", "died"};
 

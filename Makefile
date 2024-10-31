@@ -4,7 +4,9 @@ CC		=	cc
 
 # CC		=	cc -g -fsanitize=address
 
-CFLAGS=		-Wall -Wextra -Werror
+CFLAGS=		-Wall -Wextra -Werror -pthread
+CFLAGS+=	-Wunused -Wuninitialized -Wunreachable-code
+CFLAGS+=	-flto
 
 SRCDIR	=	./src
 SRC		=	$(SRCDIR)/main.c \

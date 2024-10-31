@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/31 14:37:43 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/31 17:46:25 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@ static int	dinner_time(t_main *m)
 		return (save_errno(errno));
 	pthread_mutex_lock(&m->param.mutex[START]);
 	if (create_philo_threads(m->philo, m->forks, &m->param))
-		return (cleanup(m), EXIT_FAILURE);
+	{
+		destroy_mutex(m->forks, m->param.p_amount);
+		return (EXIT_FAILURE);
+	}
 	monitor(m);
 	if (join_threads(m->philo, m->param.p_amount))
 		return (destroy_mutex(m->forks, m->param.p_amount), 1);
-	return (destroy_mutex(m->forks, m->param.p_amount));
-	//ADD! error handing mutexes and threads
+	return (destroy_mutex(m->forks, m->param.p_amount), 0);
 }
 
 int	main(int argc, char **argv)
@@ -39,7 +41,7 @@ int	main(int argc, char **argv)
 	if (malloc_structs(&m))
 		return (save_errno(RETURN_SAVED_ERRNO));
 	if (dinner_time(&m))
-		return (save_errno(RETURN_SAVED_ERRNO));
+		return (cleanup(&m), save_errno(RETURN_SAVED_ERRNO));
 	cleanup(&m);
 	return (save_errno(RETURN_SAVED_ERRNO));
 }
