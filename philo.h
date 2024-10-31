@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/31 00:55:33 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/31 13:17:39 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_param
 	bool			death_flag;
 	t_ulong			start_time;
 	t_uint			sleep_time_us;
+	bool			uneven;
 	pthread_mutex_t	mutex[5];
 }	t_param;
 
@@ -99,7 +100,7 @@ typedef struct s_main
 	t_philosopher	*philo;
 }	t_main;
 
-// main.c
+// philo_routine.c
 void		*philo_routine(void *arg);
 
 // input_handling.c

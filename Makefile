@@ -12,6 +12,7 @@ SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/input_handling.c \
 			$(SRCDIR)/init.c \
 			$(SRCDIR)/monitor.c \
+			$(SRCDIR)/philo_routine.c \
 			$(SRCDIR)/utils_pthread.c \
 			$(SRCDIR)/activities.c \
 			$(SRCDIR)/malloc_and_free.c
@@ -21,7 +22,7 @@ OBJ	=	$(SRC:.c=.o)
 all: $(NAME) 
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) $(LDFLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) -o $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<

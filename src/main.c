@@ -6,35 +6,11 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/31 01:18:15 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/31 14:37:43 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-void	*philo_routine(void *arg)
-{
-	t_philosopher	*philo;
-
-	philo = (t_philosopher *)arg;
-	pthread_mutex_lock(&philo->param->mutex[START]);
-	pthread_mutex_unlock(&philo->param->mutex[START]);
-	usleep((1 - philo->id % 2) * philo->param->p_amount * 2);
-	while (!philo->param->death_flag)
-	{
-		take_forks(philo);
-		eating(philo);
-		clean_forks(philo);
-		if (philo->times_eaten == philo->param->max_meals)
-			break ;
-		sleeping(philo);
-		thinking(philo);
-	}
-	pthread_mutex_lock(&philo->param->mutex[EAT_COUNT]);
-	philo->dine_status = JUST_FINISHED;
-	pthread_mutex_unlock(&philo->param->mutex[EAT_COUNT]);
-	return (NULL);
-}
 
 static int	dinner_time(t_main *m)
 {
@@ -47,6 +23,7 @@ static int	dinner_time(t_main *m)
 	if (join_threads(m->philo, m->param.p_amount))
 		return (destroy_mutex(m->forks, m->param.p_amount), 1);
 	return (destroy_mutex(m->forks, m->param.p_amount));
+	//ADD! error handing mutexes and threads
 }
 
 int	main(int argc, char **argv)
@@ -61,7 +38,8 @@ int	main(int argc, char **argv)
 		return (save_errno(RETURN_SAVED_ERRNO));
 	if (malloc_structs(&m))
 		return (save_errno(RETURN_SAVED_ERRNO));
-	dinner_time(&m);
+	if (dinner_time(&m))
+		return (save_errno(RETURN_SAVED_ERRNO));
 	cleanup(&m);
 	return (save_errno(RETURN_SAVED_ERRNO));
 }
