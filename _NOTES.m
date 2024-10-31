@@ -1,7 +1,6 @@
 TODO:
 
-- !IMPLEMENT ALL MUTEX TYPES!
-- !IMPLEMENT START MUTEX?
+- IMPLEMENT uneven num exception!
 - TEST deadlocks! (valgrind)
 - TEST for leaks!
 

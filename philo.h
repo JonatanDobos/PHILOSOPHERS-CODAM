@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/30 16:10:31 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/31 00:55:33 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,11 @@ enum	e_finish_state
 
 enum	e_mutex
 {
-	WRITE = 0,
+	PRINT = 0,
 	DEATH_FLAG,
 	DEATH_TIME,
-	FINISH
+	EAT_COUNT,
+	START
 };
 
 enum	e_action
@@ -74,7 +75,8 @@ typedef struct s_param
 	t_uint			max_meals;
 	bool			death_flag;
 	t_ulong			start_time;
-	pthread_mutex_t	mutex[4];
+	t_uint			sleep_time_us;
+	pthread_mutex_t	mutex[5];
 }	t_param;
 
 typedef struct s_philosopher
@@ -84,7 +86,7 @@ typedef struct s_philosopher
 	int				l_fork;
 	int				r_fork;
 	t_uint			times_eaten;
-	short			finished;
+	short			dine_status;
 	t_ulong			time_of_death;
 	pthread_mutex_t	*forks;
 	t_param			*param;
@@ -108,8 +110,6 @@ bool		check_input(t_main *m, int argc, char **argv);
 t_ulong		get_time_ms(void);
 void		usleep_interval(t_param *param, t_ulong time_to_sleep);
 bool		death_check(t_param *param);
-
-// utils_print.c
 int			save_errno(int new_errno);
 void		print_activity(int id, t_param *param, short activity);
 

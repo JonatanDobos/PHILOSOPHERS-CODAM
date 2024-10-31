@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/30 16:06:48 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/31 01:18:15 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ void	*philo_routine(void *arg)
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)arg;
+	pthread_mutex_lock(&philo->param->mutex[START]);
+	pthread_mutex_unlock(&philo->param->mutex[START]);
+	usleep((1 - philo->id % 2) * philo->param->p_amount * 2);
 	while (!philo->param->death_flag)
 	{
 		take_forks(philo);
@@ -27,7 +30,9 @@ void	*philo_routine(void *arg)
 		sleeping(philo);
 		thinking(philo);
 	}
-	philo->finished = JUST_FINISHED;
+	pthread_mutex_lock(&philo->param->mutex[EAT_COUNT]);
+	philo->dine_status = JUST_FINISHED;
+	pthread_mutex_unlock(&philo->param->mutex[EAT_COUNT]);
 	return (NULL);
 }
 
@@ -35,7 +40,7 @@ static int	dinner_time(t_main *m)
 {
 	if (init_mutex(m->forks, m->param.p_amount))
 		return (save_errno(errno));
-	m->param.start_time = get_time_ms();
+	pthread_mutex_lock(&m->param.mutex[START]);
 	if (create_philo_threads(m->philo, m->forks, &m->param))
 		return (cleanup(m), EXIT_FAILURE);
 	monitor(m);
@@ -52,7 +57,7 @@ int	main(int argc, char **argv)
 	if (check_input(&m, argc, argv))
 		return (EINVAL);
 	safety_init(&m);
-	if (init_mutex(m.param.mutex, 3))
+	if (init_mutex(m.param.mutex, 5))
 		return (save_errno(RETURN_SAVED_ERRNO));
 	if (malloc_structs(&m))
 		return (save_errno(RETURN_SAVED_ERRNO));

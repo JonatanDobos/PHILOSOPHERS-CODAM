@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:43:37 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/30 16:04:51 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/30 23:12:02 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ void	eating(t_philosopher *philo)
 	pthread_mutex_unlock(&philo->param->mutex[DEATH_FLAG]);
 	print_activity(philo->id, philo->param, EAT);
 	usleep_interval(philo->param, philo->param->time_to_eat * 1000);
-	pthread_mutex_lock(&philo->param->mutex[DEATH_FLAG]);
+	pthread_mutex_lock(&philo->param->mutex[EAT_COUNT]);
 	philo->times_eaten++;
-	pthread_mutex_unlock(&philo->param->mutex[DEATH_FLAG]);
+	pthread_mutex_unlock(&philo->param->mutex[EAT_COUNT]);
 }
 
 void	sleeping(t_philosopher *philo)

@@ -6,7 +6,7 @@
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 10:59:02 by joni          #+#    #+#                 */
-/*   Updated: 2024/10/30 10:59:59 by joni          ########   odam.nl         */
+/*   Updated: 2024/10/31 00:30:12 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ bool	init_parameters(int argc, char **argv, t_param *param)
 	}
 	else
 		param->max_meals = 0;
+	param->sleep_time_us = param->p_amount * 2 + 100;
 	return (EXIT_SUCCESS);
 }
 

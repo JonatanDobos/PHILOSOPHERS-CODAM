@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:41:49 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/30 13:16:11 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/10/30 23:54:02 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	init_philosopher_data(t_philosopher *philo, t_param *param, int i)
 	philo->r_fork = (i + 1) % param->p_amount;
 	philo->param = param;
 	philo->times_eaten = 0;
-	philo->finished = DINING;
+	philo->dine_status = DINING;
 	philo->time_of_death = get_time_ms() + (t_ulong)(param->time_to_die);
 }
 
