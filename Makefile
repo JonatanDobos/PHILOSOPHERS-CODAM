@@ -1,8 +1,8 @@
 NAME	=	philo
 
 CC		=	cc
-
-# CC		=	cc -g -fsanitize=address
+# CC		+=	-g
+CC		+=	-fsanitize=address
 
 CFLAGS=		-Wall -Wextra -Werror -pthread
 CFLAGS+=	-Wunused -Wuninitialized -Wunreachable-code
