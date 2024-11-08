@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/08 14:53:17 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/08 16:50:38 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,12 @@ int	main(int argc, char **argv)
 	if (check_input(&m, argc, argv))
 		return (EINVAL);
 	safety_init(&m);
-	if (init_mutex(m.param.mutex, 5))
+	if (init_mutex(m.param.mutex, 3))
 		return (save_errno(RETURN_SAVED_ERRNO));
 	if (malloc_structs(&m))
 		return (save_errno(RETURN_SAVED_ERRNO));
 	dinner_time(&m);
+	destr_philo_mutex(m.philo, m.param.p_amount);
 	cleanup(&m);
 	return (save_errno(RETURN_SAVED_ERRNO));
 }

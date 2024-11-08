@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/08 15:25:51 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/08 16:07:09 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,17 @@ enum	e_finish_state
 	DINING
 };
 
-enum	e_mutex
+enum	e_mutex_param
 {
 	M_PRINT = 0,
 	M_DEATH_FLAG,
-	M_DEATH_TIME,
-	M_EAT_COUNT,
 	M_START
+};
+
+enum	e_mutex_phil
+{
+	M_DINE_STAT = 0,
+	M_DEATH_TIME,
 };
 
 enum	e_action
@@ -75,7 +79,7 @@ typedef struct s_param
 	t_ulong			start_time;
 	t_uint			sleep_time_us;
 	bool			uneven;
-	pthread_mutex_t	mutex[5];
+	pthread_mutex_t	mutex[3];
 }	t_param;
 
 typedef struct s_philosopher
@@ -89,7 +93,7 @@ typedef struct s_philosopher
 	t_ulong			time_of_death;
 	pthread_mutex_t	*forks;
 	t_param			*param;
-	// pthread_mutex_t	mutex[3];
+	pthread_mutex_t	mutex[2];
 }	t_philosopher;
 
 typedef struct s_main
@@ -116,6 +120,8 @@ void		print_activity(int id, t_param *param, short activity);
 // malloc_and_free.c
 bool		malloc_structs(t_main *main);
 void		cleanup(t_main *main);
+int			init_philo_mutex(t_philosopher *philo, t_uint amount);
+int			destr_philo_mutex(t_philosopher *philo, t_uint amount);
 
 // acivities.c
 int			take_forks(t_philosopher *philo);

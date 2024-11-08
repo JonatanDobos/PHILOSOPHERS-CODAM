@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/31 12:36:26 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/08 15:24:01 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/08 16:51:07 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,18 @@ static t_uint	calc_delay(t_philosopher *philo)
 {
 	const int		id = philo->id;
 	const t_uint	p_amount = philo->param->p_amount;
-	const t_uint	time_to_die = philo->param->time_to_die;
+	const t_uint	time_to_eat = philo->param->time_to_eat;// or time to die?
 
-	return ((1 - id % 2) * p_amount * (time_to_die / 10));
+	return ((1 - id % 2) * p_amount * (time_to_eat / 10));
 }
 
 static void	set_time_of_death(t_philosopher *philo)
 {
 	const t_ulong	time_to_die = philo->param->time_to_die;
 
-	pthread_mutex_lock(&philo->param->mutex[M_DEATH_TIME]);
+	pthread_mutex_lock(&philo->mutex[M_DEATH_TIME]);
 	philo->time_of_death = get_time_ms() + (t_ulong)(time_to_die);
-	pthread_mutex_unlock(&philo->param->mutex[M_DEATH_TIME]);
+	pthread_mutex_unlock(&philo->mutex[M_DEATH_TIME]);
 }
 
 static bool	one_philo_exception(t_philosopher *philo, t_uint start_delay)
@@ -67,8 +67,8 @@ void	*philo_routine(void *arg)
 			break ;
 		sleeping(philo);
 	}
-	pthread_mutex_lock(&philo->param->mutex[M_EAT_COUNT]);
+	pthread_mutex_lock(&philo->mutex[M_DINE_STAT]);
 	philo->dine_status = JUST_FINISHED;
-	pthread_mutex_unlock(&philo->param->mutex[M_EAT_COUNT]);
+	pthread_mutex_unlock(&philo->mutex[M_DINE_STAT]);
 	return (NULL);
 }

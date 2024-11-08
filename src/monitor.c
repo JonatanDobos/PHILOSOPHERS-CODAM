@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:09 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/08 14:58:55 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/08 15:53:40 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ static bool	finish_and_death_checks(t_philosopher *philo, t_uint *finished)
 	short	status;
 	t_ulong	time_of_death;
 
-	pthread_mutex_lock(&philo->param->mutex[M_EAT_COUNT]);
+	pthread_mutex_lock(&philo->mutex[M_DINE_STAT]);
 	status = philo->dine_status;
-	pthread_mutex_unlock(&philo->param->mutex[M_EAT_COUNT]);
-	pthread_mutex_lock(&philo->param->mutex[M_DEATH_TIME]);
+	pthread_mutex_unlock(&philo->mutex[M_DINE_STAT]);
+	pthread_mutex_lock(&philo->mutex[M_DEATH_TIME]);
 	time_of_death = philo->time_of_death;
-	pthread_mutex_unlock(&philo->param->mutex[M_DEATH_TIME]);
+	pthread_mutex_unlock(&philo->mutex[M_DEATH_TIME]);
 	if (status == DINING && get_time_ms() > time_of_death)
 		return (death(philo->param, philo->id), EXIT_FAILURE);
 	else if (status == JUST_FINISHED)
@@ -46,10 +46,8 @@ void	monitor(t_main *m)
 	t_uint	i;
 	t_uint	finished;
 	finished = 0;
-	pthread_mutex_unlock(&m->param.mutex[M_START]);
-	pthread_mutex_lock(&m->param.mutex[M_PRINT]);
 	m->param.start_time = get_time_ms();
-	pthread_mutex_unlock(&m->param.mutex[M_PRINT]);
+	pthread_mutex_unlock(&m->param.mutex[M_START]);
 	while (finished < m->param.p_amount)
 	{
 		i = 0;
