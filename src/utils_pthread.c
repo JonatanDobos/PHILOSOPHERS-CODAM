@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:06 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/31 17:48:17 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/08 12:09:14 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 static void	save_the_threads(t_param *param)
 {
-	pthread_mutex_lock(&param->mutex[DEATH_FLAG]);
+	pthread_mutex_lock(&param->mutex[M_DEATH_FLAG]);
 	param->death_flag = true;
-	pthread_mutex_unlock(&param->mutex[DEATH_FLAG]);
-	pthread_mutex_unlock(&param->mutex[START]);
+	pthread_mutex_unlock(&param->mutex[M_DEATH_FLAG]);
+	pthread_mutex_unlock(&param->mutex[M_START]);
 }
 
 int	init_mutex(pthread_mutex_t *mutexes, t_uint amount)

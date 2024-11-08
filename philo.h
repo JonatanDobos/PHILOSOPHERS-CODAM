@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/31 16:53:13 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/08 12:09:14 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ enum	e_finish_state
 
 enum	e_mutex
 {
-	PRINT = 0,
-	DEATH_FLAG,
-	DEATH_TIME,
-	EAT_COUNT,
-	START
+	M_PRINT = 0,
+	M_DEATH_FLAG,
+	M_DEATH_TIME,
+	M_EAT_COUNT,
+	M_START
 };
 
 enum	e_action

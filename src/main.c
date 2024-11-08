@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/31 17:46:25 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/08 12:09:14 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	dinner_time(t_main *m)
 {
 	if (init_mutex(m->forks, m->param.p_amount))
 		return (save_errno(errno));
-	pthread_mutex_lock(&m->param.mutex[START]);
+	pthread_mutex_lock(&m->param.mutex[M_START]);
 	if (create_philo_threads(m->philo, m->forks, &m->param))
 	{
 		destroy_mutex(m->forks, m->param.p_amount);
@@ -40,8 +40,7 @@ int	main(int argc, char **argv)
 		return (save_errno(RETURN_SAVED_ERRNO));
 	if (malloc_structs(&m))
 		return (save_errno(RETURN_SAVED_ERRNO));
-	if (dinner_time(&m))
-		return (cleanup(&m), save_errno(RETURN_SAVED_ERRNO));
+	dinner_time(&m);
 	cleanup(&m);
 	return (save_errno(RETURN_SAVED_ERRNO));
 }

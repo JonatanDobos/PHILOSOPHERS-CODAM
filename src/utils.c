@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:12 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/10/31 17:34:12 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/08 12:08:50 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ bool	death_check(t_param *param)
 {
 	bool	status;
 
-	pthread_mutex_lock(&param->mutex[DEATH_FLAG]);
+	pthread_mutex_lock(&param->mutex[M_DEATH_FLAG]);
 	status = param->death_flag;
-	pthread_mutex_unlock(&param->mutex[DEATH_FLAG]);
+	pthread_mutex_unlock(&param->mutex[M_DEATH_FLAG]);
 	return (status);
 }
 
@@ -62,8 +62,8 @@ void	print_activity(int id, t_param *param, short activity)
 	const char	output[5][17] = {"is eating", "is sleeping", \
 		"is thinking", "has taken a fork", "died"};
 
-	pthread_mutex_lock(&param->mutex[PRINT]);
+	pthread_mutex_lock(&param->mutex[M_PRINT]);
 	time = get_time_ms() - param->start_time;
 	printf("%lu %d %s\n", time, id, output[activity]);
-	pthread_mutex_unlock(&param->mutex[PRINT]);
+	pthread_mutex_unlock(&param->mutex[M_PRINT]);
 }
