@@ -6,20 +6,28 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/31 12:36:26 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/08 12:16:19 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/08 15:24:01 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-static t_uint	calc_delay(int id, t_uint p_amount, t_uint time_to_die)
+static t_uint	calc_delay(t_philosopher *philo)
 {
+	const int		id = philo->id;
+	const t_uint	p_amount = philo->param->p_amount;
+	const t_uint	time_to_die = philo->param->time_to_die;
+
 	return ((1 - id % 2) * p_amount * (time_to_die / 10));
 }
 
-static t_ulong	calc_tod(t_uint time_to_die)
+static void	set_time_of_death(t_philosopher *philo)
 {
-	return (get_time_ms() + (t_ulong)(time_to_die));
+	const t_ulong	time_to_die = philo->param->time_to_die;
+
+	pthread_mutex_lock(&philo->param->mutex[M_DEATH_TIME]);
+	philo->time_of_death = get_time_ms() + (t_ulong)(time_to_die);
+	pthread_mutex_unlock(&philo->param->mutex[M_DEATH_TIME]);
 }
 
 static bool	one_philo_exception(t_philosopher *philo, t_uint start_delay)
@@ -40,19 +48,19 @@ void	*philo_routine(void *arg)
 {
 	t_philosopher	*philo;
 	t_uint			start_delay;
-
 	philo = (t_philosopher *)arg;
-	start_delay = calc_delay(philo->id, philo->param->p_amount, \
-		philo->param->time_to_die);
-	philo->time_of_death = calc_tod(philo->param->time_to_die);
+	start_delay = calc_delay(philo);
+	set_time_of_death(philo);
 	pthread_mutex_lock(&philo->param->mutex[M_START]);
 	pthread_mutex_unlock(&philo->param->mutex[M_START]);
 	if (one_philo_exception(philo, start_delay))
 		return (NULL);
-	while (!philo->param->death_flag)
+	while (!death_check(philo->param))
 	{
 		thinking(philo);
 		take_forks(philo);
+		if (death_check(philo->param))
+			break ;
 		eating(philo);
 		clean_forks(philo);
 		if (philo->times_eaten == philo->param->max_meals)

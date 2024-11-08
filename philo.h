@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/08 12:09:14 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/08 15:25:51 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ typedef struct s_philosopher
 	t_ulong			time_of_death;
 	pthread_mutex_t	*forks;
 	t_param			*param;
+	// pthread_mutex_t	mutex[3];
 }	t_philosopher;
 
 typedef struct s_main
@@ -117,7 +118,7 @@ bool		malloc_structs(t_main *main);
 void		cleanup(t_main *main);
 
 // acivities.c
-void		take_forks(t_philosopher *philo);
+int			take_forks(t_philosopher *philo);
 void		clean_forks(t_philosopher *philo);
 void		eating(t_philosopher *philo);
 void		sleeping(t_philosopher *philo);

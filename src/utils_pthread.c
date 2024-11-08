@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:06 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/08 12:09:14 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/08 13:41:38 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	create_philo_threads(
 		phil[i].forks = forks;
 		init_philosopher_data(&phil[i], param, i);
 		err = pthread_create(&phil[i].thread, NULL, philo_routine, &phil[i]);
-		if (i == 5 || err)//LEFTOFF SEGFAULT!!
+		if (err)
 		{
 			save_the_threads(param);
 			return (join_threads(phil, i), save_errno(err));
