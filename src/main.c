@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/08 16:50:38 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/11 17:49:52 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static int	dinner_time(t_main *m)
 		destroy_mutex(m->forks, m->param.p_amount);
 		return (EXIT_FAILURE);
 	}
+	usleep(42);
 	monitor(m);
 	if (join_threads(m->philo, m->param.p_amount))
 		return (destroy_mutex(m->forks, m->param.p_amount), 1);

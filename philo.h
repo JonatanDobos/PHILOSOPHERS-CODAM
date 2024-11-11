@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/08 16:07:09 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/11 17:43:35 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef struct s_main
 
 // philo_routine.c
 void		*philo_routine(void *arg);
+void		set_time_of_death(t_philosopher *philo);
 
 // input_handling.c
 bool		init_parameters(int argc, char **argv, t_param *param);
@@ -112,7 +113,7 @@ bool		check_input(t_main *m, int argc, char **argv);
 
 // utils.c
 t_ulong		get_time_ms(void);
-void		usleep_interval(t_param *param, t_ulong time_to_sleep);
+bool		usleep_interval(t_param *param, t_ulong time_to_sleep);
 bool		death_check(t_param *param);
 int			save_errno(int new_errno);
 void		print_activity(int id, t_param *param, short activity);
@@ -123,8 +124,12 @@ void		cleanup(t_main *main);
 int			init_philo_mutex(t_philosopher *philo, t_uint amount);
 int			destr_philo_mutex(t_philosopher *philo, t_uint amount);
 
+// math.c
+double		sqrt_approx(double num);
+t_uint		calc_delay(t_philosopher *philo);
+
 // acivities.c
-int			take_forks(t_philosopher *philo);
+void		take_forks(t_philosopher *philo);
 void		clean_forks(t_philosopher *philo);
 void		eating(t_philosopher *philo);
 void		sleeping(t_philosopher *philo);

@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:12 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/08 15:42:55 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/11 17:45:33 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,23 @@ t_ulong	get_time_ms(void)
 	return ((tv.tv_sec * 1000L) + (tv.tv_usec / 1000L));
 }
 
-void	usleep_interval(t_param *param, t_ulong time_to_sleep)
+bool	usleep_interval(t_param *param, t_ulong time_to_sleep)
 {
 	t_tv	tv;
 	t_ulong	time_in_us;
+	bool	death;
 
 	gettimeofday(&tv, NULL);
 	time_in_us = ((tv.tv_sec % 100000L) * 1000000L) + tv.tv_usec;
 	time_to_sleep += time_in_us;
-	while (time_in_us < time_to_sleep && !death_check(param))
+	while (time_in_us < time_to_sleep && !death)
 	{
 		usleep(param->sleep_time_us);
 		gettimeofday(&tv, NULL);
 		time_in_us = ((tv.tv_sec % 100000L) * 1000000L) + tv.tv_usec;
+		death = death_check(param);
 	}
+	return (death);
 }
 
 bool	death_check(t_param *param)

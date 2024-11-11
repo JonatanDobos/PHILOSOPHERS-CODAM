@@ -6,7 +6,7 @@
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 10:59:02 by joni          #+#    #+#                 */
-/*   Updated: 2024/10/31 17:28:35 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/11 14:55:10 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ bool	check_input(t_main *m, int argc, char **argv)
 			return (printf("%s", PROMPT), EXIT_FAILURE);
 		++i;
 	}
-
 	if (init_parameters(argc, argv, &m->param))
 		return (printf("%s", PROMPT), EXIT_FAILURE);
 	return (EXIT_SUCCESS);

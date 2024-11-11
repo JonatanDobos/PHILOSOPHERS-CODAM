@@ -13,6 +13,7 @@ SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/utils.c \
 			$(SRCDIR)/input_handling.c \
 			$(SRCDIR)/init.c \
+			$(SRCDIR)/math.c \
 			$(SRCDIR)/monitor.c \
 			$(SRCDIR)/philo_routine.c \
 			$(SRCDIR)/utils_pthread.c \
