@@ -6,7 +6,7 @@
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 10:59:02 by joni          #+#    #+#                 */
-/*   Updated: 2024/11/11 14:55:10 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/13 16:19:31 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ bool	init_parameters(int argc, char **argv, t_param *param)
 	}
 	else
 		param->max_meals = 0;
-	param->sleep_time_us = param->p_amount * 2 + 100;
+	param->sleep_time_us = (sqrt_approx(param->p_amount) * 10.0) + 100;
+	fprintf(stderr, "INTERVAL: %d\n", param->sleep_time_us);//test
 	param->uneven = param->p_amount % 2;
 	return (EXIT_SUCCESS);
 }

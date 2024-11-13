@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/11 16:06:11 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/11 16:55:40 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/13 16:25:33 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ double	sqrt_approx(double num)
 
 	if (num < 0)
 		return (-1);
-	iter = 5;
+	iter = 6;
 	guess = num / 2.0F;
 	while (iter--)
 	{
@@ -37,6 +37,6 @@ t_uint	calc_delay(t_philosopher *philo)
 
 	multiplier = ((philo->param->time_to_eat + philo->param->time_to_sleep \
 		+ (philo->param->time_to_die * 3)) / 10.0F) + 1.0F;
-	value = ((sqrt_approx(p_amount) * multiplier) * 2.0) + 10.0;
+	value = ((sqrt_approx(p_amount) * sqrt_approx(multiplier)) * 5.0) + 100.0;
 	return ((1 - id % 2) * (t_uint)(value));
 }

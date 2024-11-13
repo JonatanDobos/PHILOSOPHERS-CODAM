@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/11 17:43:35 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/13 15:36:14 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define PROMPT "Syntax Error! correct usage:\n./philo \
 [number_of_philosophers] [time_to_die] [time_to_eat] \
 [time_to_sleep] [number_of_times_each_philosopher_must_eat](optional)\n\
-Values lower than 1 not allowed!"
+Values lower than 1 not allowed!\n"
 
 enum	e_error
 {
@@ -129,7 +129,7 @@ double		sqrt_approx(double num);
 t_uint		calc_delay(t_philosopher *philo);
 
 // acivities.c
-void		take_forks(t_philosopher *philo);
+bool		take_forks(t_philosopher *philo);
 void		clean_forks(t_philosopher *philo);
 void		eating(t_philosopher *philo);
 void		sleeping(t_philosopher *philo);

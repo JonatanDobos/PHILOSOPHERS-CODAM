@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/31 12:36:26 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/11 17:47:19 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/13 16:18:44 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philosopher *)arg;
 	start_delay = calc_delay(philo);
+	if (philo->id == 1 || philo->id == 2)
+		fprintf(stderr, "DELAY [%d]: %d\n", philo->id, start_delay);//test
 	pthread_mutex_lock(&philo->param->mutex[M_START]);
 	pthread_mutex_unlock(&philo->param->mutex[M_START]);
 	set_time_of_death(philo);
@@ -57,9 +59,8 @@ void	*philo_routine(void *arg)
 	while (!death_check(philo->param))
 	{
 		thinking(philo);
-		take_forks(philo);
-		if (death_check(philo->param))
-			break ;
+		if (!take_forks(philo))
+			return (NULL);
 		eating(philo);
 		clean_forks(philo);
 		if (philo->times_eaten == philo->param->max_meals)
