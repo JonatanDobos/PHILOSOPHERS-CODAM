@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/13 15:36:14 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/14 18:46:44 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,12 @@ enum	e_finish_state
 	DINING
 };
 
+enum	e_exit
+{
+	SUCCESS = 0,
+	FAILURE
+};
+
 enum	e_mutex_param
 {
 	M_PRINT = 0,
@@ -65,7 +71,6 @@ enum	e_action
 };
 
 typedef unsigned int	t_uint;
-typedef unsigned long	t_ulong;
 typedef struct timeval	t_tv;
 
 typedef struct s_param
@@ -76,8 +81,9 @@ typedef struct s_param
 	t_uint			time_to_sleep;
 	t_uint			max_meals;
 	bool			death_flag;
-	t_ulong			start_time;
+	size_t			start_time;
 	t_uint			sleep_time_us;
+	t_uint			delay_time_us;
 	bool			uneven;
 	pthread_mutex_t	mutex[3];
 }	t_param;
@@ -90,7 +96,7 @@ typedef struct s_philosopher
 	int				r_fork;
 	t_uint			times_eaten;
 	short			dine_status;
-	t_ulong			time_of_death;
+	size_t			time_of_death;
 	pthread_mutex_t	*forks;
 	t_param			*param;
 	pthread_mutex_t	mutex[2];
@@ -112,8 +118,8 @@ bool		init_parameters(int argc, char **argv, t_param *param);
 bool		check_input(t_main *m, int argc, char **argv);
 
 // utils.c
-t_ulong		get_time_ms(void);
-bool		usleep_interval(t_param *param, t_ulong time_to_sleep);
+size_t		get_time_ms(void);
+bool		usleep_interval(t_param *param, size_t time_to_sleep);
 bool		death_check(t_param *param);
 int			save_errno(int new_errno);
 void		print_activity(int id, t_param *param, short activity);
@@ -126,7 +132,7 @@ int			destr_philo_mutex(t_philosopher *philo, t_uint amount);
 
 // math.c
 double		sqrt_approx(double num);
-t_uint		calc_delay(t_philosopher *philo);
+t_uint		calc_delay(t_param *param);
 
 // acivities.c
 bool		take_forks(t_philosopher *philo);

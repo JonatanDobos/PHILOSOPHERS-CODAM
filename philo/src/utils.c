@@ -6,13 +6,13 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:12 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/11 17:45:33 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/14 18:33:20 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-t_ulong	get_time_ms(void)
+size_t	get_time_ms(void)
 {
 	t_tv	tv;
 
@@ -20,10 +20,10 @@ t_ulong	get_time_ms(void)
 	return ((tv.tv_sec * 1000L) + (tv.tv_usec / 1000L));
 }
 
-bool	usleep_interval(t_param *param, t_ulong time_to_sleep)
+bool	usleep_interval(t_param *param, size_t time_to_sleep)
 {
 	t_tv	tv;
-	t_ulong	time_in_us;
+	size_t	time_in_us;
 	bool	death;
 
 	gettimeofday(&tv, NULL);
@@ -61,12 +61,13 @@ int	save_errno(int new_errno)
 
 void	print_activity(int id, t_param *param, short activity)
 {
-	t_ulong		time;
+	size_t		time;
 	const char	output[5][17] = {"is eating", "is sleeping", \
 		"is thinking", "has taken a fork", "died"};
 
 	pthread_mutex_lock(&param->mutex[M_PRINT]);
 	time = get_time_ms() - param->start_time;
-	printf("%lu %d %s\n", time, id, output[activity]);
+	if (!death_check(param))
+		printf("%lu %d %s\n", time, id, output[activity]);
 	pthread_mutex_unlock(&param->mutex[M_PRINT]);
 }

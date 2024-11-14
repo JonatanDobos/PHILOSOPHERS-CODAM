@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/11 16:06:11 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/13 16:25:33 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/14 18:46:37 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,14 @@ double	sqrt_approx(double num)
 	return (guess);
 }
 
-t_uint	calc_delay(t_philosopher *philo)
+t_uint	calc_delay(t_param *param)
 {
-	const int		id = philo->id;
-	const double	p_amount = philo->param->p_amount;
+	const double	p_amount = param->p_amount;
 	double			value;
 	double			multiplier;
 
-	multiplier = ((philo->param->time_to_eat + philo->param->time_to_sleep \
-		+ (philo->param->time_to_die * 3)) / 10.0F) + 1.0F;
+	multiplier = ((param->time_to_eat + param->time_to_sleep \
+		+ (param->time_to_die * 3)) / 10.0F) + 1.0F;
 	value = ((sqrt_approx(p_amount) * sqrt_approx(multiplier)) * 5.0) + 100.0;
-	return ((1 - id % 2) * (t_uint)(value));
+	return ((t_uint)(value));
 }

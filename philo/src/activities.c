@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:43:37 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/13 15:36:41 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/14 17:41:06 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ void	eating(t_philosopher *philo)
 		return ;
 	set_time_of_death(philo);
 	print_activity(philo->id, philo->param, EAT);
-	if (usleep_interval(philo->param, philo->param->time_to_eat * 1000))
-		return ;
+	usleep_interval(philo->param, philo->param->time_to_eat * 1000);
 	philo->times_eaten++;
 }
 
@@ -58,7 +57,7 @@ void	sleeping(t_philosopher *philo)
 
 void	thinking(t_philosopher *philo)
 {
-	const t_ulong	time = philo->param->uneven * \
+	const size_t	time = philo->param->uneven * \
 		(philo->time_of_death - get_time_ms());
 
 	if (death_check(philo->param))

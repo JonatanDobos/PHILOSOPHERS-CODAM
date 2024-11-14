@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:09 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/11 17:49:37 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/14 17:41:06 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	death(t_param *param, t_uint id)
 static bool	finish_and_death_checks(t_philosopher *philo, t_uint *finished)
 {
 	short	status;
-	t_ulong	time_of_death;
+	size_t	time_of_death;
 
 	pthread_mutex_lock(&philo->mutex[M_DINE_STAT]);
 	status = philo->dine_status;
@@ -31,7 +31,7 @@ static bool	finish_and_death_checks(t_philosopher *philo, t_uint *finished)
 	pthread_mutex_lock(&philo->mutex[M_DEATH_TIME]);
 	time_of_death = philo->time_of_death;
 	pthread_mutex_unlock(&philo->mutex[M_DEATH_TIME]);
-	if (status == DINING && get_time_ms() > time_of_death)
+	if (status == DINING && get_time_ms() + 1 > time_of_death)
 		return (death(philo->param, philo->id), true);
 	else if (status == JUST_FINISHED)
 	{

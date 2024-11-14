@@ -6,7 +6,7 @@
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 10:59:02 by joni          #+#    #+#                 */
-/*   Updated: 2024/11/13 16:19:31 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/14 18:47:57 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static bool	p_isdigit(char c)
 static t_uint	p_atoui(char *str)
 {
 	t_uint	i;
-	t_ulong	ret;
+	size_t	ret;
 
 	i = 0;
 	ret = 0;
@@ -52,20 +52,22 @@ bool	init_parameters(int argc, char **argv, t_param *param)
 	if (save_errno(RETURN_SAVED_ERRNO) == EINVAL || param->p_amount < 1
 		|| param->time_to_die < 1 || param->time_to_eat < 1
 		|| param->time_to_sleep < 1)
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	if (argc == 6)
 	{
 		tmp = p_atoui(argv[5]);
 		if (tmp == 0)
-			return (EXIT_FAILURE);
+			return (FAILURE);
 		param->max_meals = tmp;
 	}
 	else
 		param->max_meals = 0;
-	param->sleep_time_us = (sqrt_approx(param->p_amount) * 10.0) + 100;
+	param->sleep_time_us = (t_uint)(sqrt_approx(param->p_amount) * 22.0) + 100;
+	param->delay_time_us = calc_delay(param);
 	fprintf(stderr, "INTERVAL: %d\n", param->sleep_time_us);//test
+	fprintf(stderr, "DELAY: %d\n", param->delay_time_us);//test
 	param->uneven = param->p_amount % 2;
-	return (EXIT_SUCCESS);
+	return (SUCCESS);
 }
 
 bool	check_input(t_main *m, int argc, char **argv)
@@ -74,7 +76,7 @@ bool	check_input(t_main *m, int argc, char **argv)
 	int	j;
 
 	if (argc < 5 || argc > 6)
-		return (printf("%s", PROMPT), EXIT_FAILURE);
+		return (printf("%s", PROMPT), FAILURE);
 	i = 1;
 	while (i < argc)
 	{
@@ -82,10 +84,10 @@ bool	check_input(t_main *m, int argc, char **argv)
 		while (argv[i][j] && p_isdigit(argv[i][j]))
 			++j;
 		if (argv[i][j] != '\0')
-			return (printf("%s", PROMPT), EXIT_FAILURE);
+			return (printf("%s", PROMPT), FAILURE);
 		++i;
 	}
 	if (init_parameters(argc, argv, &m->param))
-		return (printf("%s", PROMPT), EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+		return (printf("%s", PROMPT), FAILURE);
+	return (SUCCESS);
 }

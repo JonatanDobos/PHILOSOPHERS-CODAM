@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:06 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/08 16:46:19 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/14 18:11:05 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	init_mutex(pthread_mutex_t *mutexes, t_uint amount)
 			return (destroy_mutex(mutexes, i), save_errno(err));
 		++i;
 	}
-	return (EXIT_SUCCESS);
+	return (SUCCESS);
 }
 
 int	destroy_mutex(pthread_mutex_t *mutexes, t_uint amount)
@@ -70,7 +70,7 @@ int	create_philo_threads(
 		}
 		++i;
 	}
-	return (EXIT_SUCCESS);
+	return (SUCCESS);
 }
 
 int	join_threads(t_philosopher *philos, t_uint amount)
