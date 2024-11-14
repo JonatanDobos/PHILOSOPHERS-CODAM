@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/08 15:25:51 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/14 16:40:01 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define PROMPT "Syntax Error! correct usage:\n./philo \
 [number_of_philosophers] [time_to_die] [time_to_eat] \
 [time_to_sleep] [number_of_times_each_philosopher_must_eat](optional)\n\
-Values lower than 1 not allowed!"
+Values lower than 1 not allowed!\n"
 
 enum	e_error
 {
@@ -89,7 +89,6 @@ typedef struct s_philosopher
 	t_ulong			time_of_death;
 	pthread_mutex_t	*forks;
 	t_param			*param;
-	// pthread_mutex_t	mutex[3];
 }	t_philosopher;
 
 typedef struct s_main
@@ -101,6 +100,7 @@ typedef struct s_main
 
 // philo_routine.c
 void		*philo_routine(void *arg);
+void		set_time_of_death(t_philosopher *philo);
 
 // input_handling.c
 bool		init_parameters(int argc, char **argv, t_param *param);
