@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:06 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/14 18:11:05 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/15 00:35:01 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	create_philo_threads(
 	int		err;
 
 	i = 0;
+	pthread_mutex_lock(&param->mutex[M_START]);
 	while (i < param->p_amount)
 	{
 		phil[i].forks = forks;

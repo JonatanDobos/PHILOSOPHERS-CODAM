@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:41:49 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/14 17:23:46 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/15 00:51:29 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	init_philosopher_data(t_philosopher *philo, t_param *param, int i)
 		philo->l_fork = i;
 		philo->r_fork = (i + 1) % param->p_amount;
 	}
+	// fprintf(stderr, "P[%d] LF[%d]%p	RF[%d]%p\n", philo->id, \
+	// 	philo->l_fork, &philo->forks[philo->l_fork], philo->r_fork, &philo->forks[philo->r_fork]);//t
 	philo->param = param;
 	philo->times_eaten = 0;
 	philo->dine_status = DINING;

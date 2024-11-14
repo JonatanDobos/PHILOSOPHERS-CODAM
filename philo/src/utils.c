@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:12 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/14 18:33:20 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/15 00:22:34 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool	usleep_interval(t_param *param, size_t time_to_sleep)
 	time_to_sleep += time_in_us;
 	while (time_in_us < time_to_sleep && !death)
 	{
-		usleep(param->sleep_time_us);
+		usleep(param->interval_time_us);
 		gettimeofday(&tv, NULL);
 		time_in_us = ((tv.tv_sec % 100000L) * 1000000L) + tv.tv_usec;
 		death = death_check(param);

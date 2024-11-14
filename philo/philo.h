@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/14 18:46:44 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/15 00:22:34 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ typedef struct s_param
 	t_uint			max_meals;
 	bool			death_flag;
 	size_t			start_time;
-	t_uint			sleep_time_us;
+	t_uint			interval_time_us;
 	t_uint			delay_time_us;
 	bool			uneven;
 	pthread_mutex_t	mutex[3];
@@ -133,6 +133,7 @@ int			destr_philo_mutex(t_philosopher *philo, t_uint amount);
 // math.c
 double		sqrt_approx(double num);
 t_uint		calc_delay(t_param *param);
+t_uint		calc_interval(t_param *param);
 
 // acivities.c
 bool		take_forks(t_philosopher *philo);

@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:02 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/14 18:11:58 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/15 00:35:21 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static int	dinner_time(t_main *m)
 {
 	if (init_mutex(m->forks, m->param.p_amount))
 		return (save_errno(errno));
-	pthread_mutex_lock(&m->param.mutex[M_START]);
 	if (create_philo_threads(m->philo, m->forks, &m->param))
 	{
 		destroy_mutex(m->forks, m->param.p_amount);
