@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/11 16:06:11 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/15 00:13:53 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/15 16:52:11 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ double	sqrt_approx(double num)
 
 t_uint	calc_delay(t_param *param)
 {
-	const double	p_amount = param->p_amount;
+	const double	p_amount = (double)param->p_amount;
 	double			value;
 	double			multiplier;
 
 	multiplier = ((param->time_to_eat + param->time_to_sleep \
 		+ (param->time_to_die * 3)) / 10.0F) + 1.0F;
-	value = ((sqrt_approx(p_amount) * sqrt_approx(multiplier)) * 5.0) + 100.0;
+	value = ((sqrt_approx(p_amount) + sqrt_approx(multiplier)) * 20.0) + 100.0;
 	return ((t_uint)(value));
 }
 

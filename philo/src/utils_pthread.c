@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:06 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/15 00:35:01 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/15 16:22:27 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	create_philo_threads(
 			save_the_threads(param);
 			return (join_threads(phil, i), save_errno(err));
 		}
+		usleep(2);
 		++i;
 	}
 	return (SUCCESS);

@@ -1,7 +1,7 @@
 #include "philo.h"
 #include <math.h>
 
-size_t	get_time_ms(void)
+t_ulong	get_time_ms(void)
 {
 	t_tv	tv;
 
@@ -9,10 +9,10 @@ size_t	get_time_ms(void)
 	return ((tv.tv_sec * 1000L) + (tv.tv_usec / 1000L));
 }
 
-bool	usleep_interval(t_param *param, size_t time_to_sleep)
+bool	usleep_interval(t_param *param, t_ulong time_to_sleep)
 {
 	t_tv	tv;
-	size_t	time_in_us;
+	t_ulong	time_in_us;
 	bool	death;
 
 	gettimeofday(&tv, NULL);
@@ -61,7 +61,7 @@ static bool	p_isdigit(char c)
 static t_uint	p_atoui(char *str)
 {
 	t_uint	i;
-	size_t	ret;
+	t_ulong	ret;
 
 	i = 0;
 	ret = 0;

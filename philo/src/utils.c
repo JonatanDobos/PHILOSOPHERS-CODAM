@@ -6,13 +6,13 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:12 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/15 00:22:34 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/15 16:38:02 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-size_t	get_time_ms(void)
+t_ulong	get_time_ms(void)
 {
 	t_tv	tv;
 
@@ -20,10 +20,10 @@ size_t	get_time_ms(void)
 	return ((tv.tv_sec * 1000L) + (tv.tv_usec / 1000L));
 }
 
-bool	usleep_interval(t_param *param, size_t time_to_sleep)
+bool	usleep_interval(t_param *param, t_ulong time_to_sleep)
 {
 	t_tv	tv;
-	size_t	time_in_us;
+	t_ulong	time_in_us;
 	bool	death;
 
 	gettimeofday(&tv, NULL);
@@ -61,9 +61,9 @@ int	save_errno(int new_errno)
 
 void	print_activity(int id, t_param *param, short activity)
 {
-	size_t		time;
-	const char	output[5][17] = {"is eating", "is sleeping", \
-		"is thinking", "has taken a fork", "died"};
+	t_ulong		time;
+	const char	output[4][17] = {"is eating", "is sleeping", \
+		"is thinking", "has taken a fork"};
 
 	pthread_mutex_lock(&param->mutex[M_PRINT]);
 	time = get_time_ms() - param->start_time;

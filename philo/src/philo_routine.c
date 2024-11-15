@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/31 12:36:26 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/14 18:51:56 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/15 16:00:03 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	set_time_of_death(t_philosopher *philo)
 {
-	const size_t	time_to_die = philo->param->time_to_die;
+	const t_ulong	time_to_die = philo->param->time_to_die;
 
 	pthread_mutex_lock(&philo->mutex[M_DEATH_TIME]);
 	philo->time_of_death = get_time_ms() + time_to_die;

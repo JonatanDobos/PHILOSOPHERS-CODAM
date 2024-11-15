@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:09 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/15 00:17:53 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/15 16:39:52 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,21 @@
 
 static void	death(t_param *param, t_uint id)
 {
+	t_ulong		time;
+
 	pthread_mutex_lock(&param->mutex[M_DEATH_FLAG]);
 	param->death_flag = true;
 	pthread_mutex_unlock(&param->mutex[M_DEATH_FLAG]);
-	print_activity(id, param, DIED);
+	pthread_mutex_lock(&param->mutex[M_PRINT]);
+	time = get_time_ms() - param->start_time;
+	printf("%lu %d died\n", time, id);
+	pthread_mutex_unlock(&param->mutex[M_PRINT]);
 }
 
 static bool	finish_and_death_checks(t_philosopher *philo, t_uint *finished)
 {
 	short	status;
-	size_t	time_of_death;
+	t_ulong	time_of_death;
 
 	pthread_mutex_lock(&philo->mutex[M_DINE_STAT]);
 	status = philo->dine_status;

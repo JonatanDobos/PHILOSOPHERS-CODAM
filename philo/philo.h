@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/15 00:22:34 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/15 16:38:13 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,11 @@ enum	e_action
 	EAT = 0,
 	SLEEP,
 	THINK,
-	FORK,
-	DIED
+	FORK
 };
 
 typedef unsigned int	t_uint;
+typedef unsigned long	t_ulong;
 typedef struct timeval	t_tv;
 
 typedef struct s_param
@@ -81,7 +81,7 @@ typedef struct s_param
 	t_uint			time_to_sleep;
 	t_uint			max_meals;
 	bool			death_flag;
-	size_t			start_time;
+	t_ulong			start_time;
 	t_uint			interval_time_us;
 	t_uint			delay_time_us;
 	bool			uneven;
@@ -96,7 +96,7 @@ typedef struct s_philosopher
 	int				r_fork;
 	t_uint			times_eaten;
 	short			dine_status;
-	size_t			time_of_death;
+	t_ulong			time_of_death;
 	pthread_mutex_t	*forks;
 	t_param			*param;
 	pthread_mutex_t	mutex[2];
@@ -118,8 +118,8 @@ bool		init_parameters(int argc, char **argv, t_param *param);
 bool		check_input(t_main *m, int argc, char **argv);
 
 // utils.c
-size_t		get_time_ms(void);
-bool		usleep_interval(t_param *param, size_t time_to_sleep);
+t_ulong		get_time_ms(void);
+bool		usleep_interval(t_param *param, t_ulong time_to_sleep);
 bool		death_check(t_param *param);
 int			save_errno(int new_errno);
 void		print_activity(int id, t_param *param, short activity);

@@ -6,7 +6,7 @@
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 10:59:02 by joni          #+#    #+#                 */
-/*   Updated: 2024/11/15 00:53:35 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/15 16:00:03 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static bool	p_isdigit(char c)
 static t_uint	p_atoui(char *str)
 {
 	t_uint	i;
-	size_t	ret;
+	t_ulong	ret;
 
 	i = 0;
 	ret = 0;
@@ -64,8 +64,8 @@ bool	init_parameters(int argc, char **argv, t_param *param)
 		param->max_meals = 0;
 	param->interval_time_us = calc_interval(param);
 	param->delay_time_us = calc_delay(param);
-	// fprintf(stderr, "INTERVAL: %d\n", param->interval_time_us);//test
-	// fprintf(stderr, "DELAY: %d\n", param->delay_time_us);//test
+	fprintf(stderr, "INTERVAL: %d\n", param->interval_time_us);//test
+	fprintf(stderr, "DELAY: %d\n", param->delay_time_us);//test
 	param->uneven = param->p_amount % 2;
 	return (SUCCESS);
 }
