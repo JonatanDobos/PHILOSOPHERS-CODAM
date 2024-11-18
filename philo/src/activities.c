@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:43:37 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/15 16:24:59 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/18 15:14:37 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,5 @@ void	thinking(t_philosopher *philo)
 		(philo->time_of_death - get_time_ms());
 
 	print_activity(philo->id, philo->param, THINK);
-	fprintf(stderr, "THINK TIME[%d]: %ld\n", philo->id, time);//t
 	usleep_interval(philo->param, time);
 }

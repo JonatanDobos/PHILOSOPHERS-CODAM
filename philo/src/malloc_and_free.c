@@ -6,7 +6,7 @@
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 15:31:50 by joni          #+#    #+#                 */
-/*   Updated: 2024/11/14 18:11:58 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/18 15:16:01 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ bool	malloc_structs(t_main *m)
 
 void	cleanup(t_main *m)
 {
-	destroy_mutex(m->param.mutex, 3);
 	if (m->forks)
 		free(m->forks);
 	if (m->philo)
 		free(m->philo);
+	destroy_mutex(m->param.mutex, 2);
 }
 
 int	init_philo_mutex(t_philosopher *philo, t_uint amount)
@@ -44,7 +44,7 @@ int	init_philo_mutex(t_philosopher *philo, t_uint amount)
 	i = 0;
 	while (i < amount)
 	{
-		err = init_mutex((philo[i]).mutex, 2);
+		err = init_mutex(&(philo[i]).mutex, 1);
 		if (err)
 			return (destr_philo_mutex(philo, i), save_errno(err));
 		++i;
@@ -60,7 +60,7 @@ int	destr_philo_mutex(t_philosopher *philo, t_uint amount)
 	i = 0;
 	while (i < amount)
 	{
-		err = destroy_mutex((philo[i]).mutex, 2);
+		err = destroy_mutex(&(philo[i]).mutex, 1);
 		if (err)
 			save_errno(err);
 		++i;

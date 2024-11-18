@@ -6,19 +6,11 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:06 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/15 16:22:27 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/18 14:37:05 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-static void	save_the_threads(t_param *param)
-{
-	pthread_mutex_lock(&param->mutex[M_DEATH_FLAG]);
-	param->death_flag = true;
-	pthread_mutex_unlock(&param->mutex[M_DEATH_FLAG]);
-	pthread_mutex_unlock(&param->mutex[M_START]);
-}
 
 int	init_mutex(pthread_mutex_t *mutexes, t_uint amount)
 {
@@ -58,7 +50,7 @@ int	create_philo_threads(
 	int		err;
 
 	i = 0;
-	pthread_mutex_lock(&param->mutex[M_START]);
+	pthread_mutex_lock(&param->mutex[M_DEATH_FLAG]);
 	while (i < param->p_amount)
 	{
 		phil[i].forks = forks;
@@ -66,10 +58,11 @@ int	create_philo_threads(
 		err = pthread_create(&phil[i].thread, NULL, philo_routine, &phil[i]);
 		if (err)
 		{
-			save_the_threads(param);
+			param->death_flag = true;
+			pthread_mutex_unlock(&param->mutex[M_DEATH_FLAG]);
 			return (join_threads(phil, i), save_errno(err));
 		}
-		usleep(2);
+		usleep(10);
 		++i;
 	}
 	return (SUCCESS);

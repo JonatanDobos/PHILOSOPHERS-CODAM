@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/15 16:38:13 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/18 15:40:14 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 [number_of_philosophers] [time_to_die] [time_to_eat] \
 [time_to_sleep] [number_of_times_each_philosopher_must_eat](optional)\n\
 Values lower than 1 not allowed!\n"
+# define SLOWPOKE_MULTIPLIER 1.0
 
 enum	e_error
 {
@@ -51,8 +52,7 @@ enum	e_exit
 enum	e_mutex_param
 {
 	M_PRINT = 0,
-	M_DEATH_FLAG,
-	M_START
+	M_DEATH_FLAG
 };
 
 enum	e_mutex_phil
@@ -85,7 +85,7 @@ typedef struct s_param
 	t_uint			interval_time_us;
 	t_uint			delay_time_us;
 	bool			uneven;
-	pthread_mutex_t	mutex[3];
+	pthread_mutex_t	mutex[2];
 }	t_param;
 
 typedef struct s_philosopher
@@ -99,7 +99,7 @@ typedef struct s_philosopher
 	t_ulong			time_of_death;
 	pthread_mutex_t	*forks;
 	t_param			*param;
-	pthread_mutex_t	mutex[2];
+	pthread_mutex_t	mutex;
 }	t_philosopher;
 
 typedef struct s_main
@@ -131,7 +131,6 @@ int			init_philo_mutex(t_philosopher *philo, t_uint amount);
 int			destr_philo_mutex(t_philosopher *philo, t_uint amount);
 
 // math.c
-double		sqrt_approx(double num);
 t_uint		calc_delay(t_param *param);
 t_uint		calc_interval(t_param *param);
 
