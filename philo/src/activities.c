@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:43:37 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/18 15:14:37 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/20 15:15:08 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,6 @@ void	sleeping(t_philosopher *philo)
 
 void	thinking(t_philosopher *philo)
 {
-	const t_ulong	time = philo->param->uneven * \
-		(philo->time_of_death - get_time_ms());
-
 	print_activity(philo->id, philo->param, THINK);
-	usleep_interval(philo->param, time);
+	usleep_interval(philo->param, philo->param->think_time_us);
 }

@@ -6,25 +6,34 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:41:49 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/18 14:45:17 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/20 15:45:06 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	init_philosopher_data(t_philosopher *philo, t_param *param, int i)
+static void	assign_forks(
+	t_philosopher *philo, t_param *param, int i, bool r_high)
 {
-	philo->id = i + 1;
-	if (philo->id % 2 == 0)
-	{
-		philo->r_fork = i;
-		philo->l_fork = (i + 1) % param->p_amount;
-	}
-	else
+	if (r_high == true)
 	{
 		philo->l_fork = i;
 		philo->r_fork = (i + 1) % param->p_amount;
 	}
+	else
+	{
+		philo->r_fork = i;
+		philo->l_fork = (i + 1) % param->p_amount;
+	}
+}
+
+void	init_philosopher_data(t_philosopher *philo, t_param *param, int i)
+{
+	philo->id = i + 1;
+	if (philo->id % 2 == 0)
+		assign_forks(philo, param, i, false);
+	else
+		assign_forks(philo, param, i, true);
 	philo->param = param;
 	philo->times_eaten = 0;
 	philo->dine_status = DINING;

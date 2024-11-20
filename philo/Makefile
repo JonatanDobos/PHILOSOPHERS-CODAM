@@ -2,7 +2,7 @@ NAME	=	philo
 
 CC		=	cc
 CC		+=	-g
-CC		+=	-fsanitize=thread
+# CC		+=	-fsanitize=thread
 
 CFLAGS	=	-Wall -Wextra -Werror -pthread
 CFLAGS	+=	-Wunused -Wuninitialized -Wunreachable-code

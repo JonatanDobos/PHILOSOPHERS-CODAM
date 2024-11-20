@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/31 12:36:26 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/18 15:17:11 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/20 15:26:50 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	*philo_routine(void *arg)
 	if (!death_check(philo->param))
 		usleep(start_delay);
 	set_time_of_death(philo);
-	// fprintf(stderr, "start_delay[%d]: %u\n", philo->id, start_delay);//t
 	while (!death_check(philo->param))
 	{
 		thinking(philo);

@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:09 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/18 15:15:22 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/20 15:32:53 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	monitor(t_main *m)
 	while (finished < m->param.p_amount)
 	{
 		i = 0;
-		usleep(m->param.interval_time_us);
+		usleep(m->param.monitor_rest_time_us);
 		while (i < m->param.p_amount)
 		{
 			if (finish_and_death_checks(&m->philo[i], &finished))

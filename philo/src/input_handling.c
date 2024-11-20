@@ -6,7 +6,7 @@
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 10:59:02 by joni          #+#    #+#                 */
-/*   Updated: 2024/11/18 13:33:27 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/20 15:45:17 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,15 @@ static t_uint	p_atoui(char *str)
 	return ((t_uint)ret);
 }
 
+static void	calculate_timings(t_param *param)
+{
+	param->interval_time_us = calc_interval(param);
+	param->delay_time_us = calc_delay(param);
+	param->uneven = param->p_amount % 2;
+	param->think_time_us = param->uneven * calc_thinktime(param);
+	param->monitor_rest_time_us = calc_monitor_rest(param);
+}
+
 bool	init_parameters(int argc, char **argv, t_param *param)
 {
 	int	tmp;
@@ -62,11 +71,7 @@ bool	init_parameters(int argc, char **argv, t_param *param)
 	}
 	else
 		param->max_meals = 0;
-	param->interval_time_us = calc_interval(param);
-	param->delay_time_us = calc_delay(param);
-	fprintf(stderr, "INTERVAL: %d\n", param->interval_time_us);//test
-	fprintf(stderr, "DELAY: %d\n", param->delay_time_us);//test
-	param->uneven = param->p_amount % 2;
+	calculate_timings(param);
 	return (SUCCESS);
 }
 

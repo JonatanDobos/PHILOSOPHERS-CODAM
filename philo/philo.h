@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/18 15:40:14 by joni          ########   odam.nl         */
+/*   Updated: 2024/11/20 15:48:29 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 [number_of_philosophers] [time_to_die] [time_to_eat] \
 [time_to_sleep] [number_of_times_each_philosopher_must_eat](optional)\n\
 Values lower than 1 not allowed!\n"
-# define SLOWPOKE_MULTIPLIER 1.0
+# define MULTIPLIER 1.0
 
 enum	e_error
 {
@@ -84,6 +84,8 @@ typedef struct s_param
 	t_ulong			start_time;
 	t_uint			interval_time_us;
 	t_uint			delay_time_us;
+	t_uint			think_time_us;
+	t_uint			monitor_rest_time_us;
 	bool			uneven;
 	pthread_mutex_t	mutex[2];
 }	t_param;
@@ -133,6 +135,8 @@ int			destr_philo_mutex(t_philosopher *philo, t_uint amount);
 // math.c
 t_uint		calc_delay(t_param *param);
 t_uint		calc_interval(t_param *param);
+t_uint		calc_thinktime(t_param *param);
+t_uint		calc_monitor_rest(t_param *param);
 
 // acivities.c
 bool		take_forks(t_philosopher *philo);
@@ -141,7 +145,7 @@ void		eating(t_philosopher *philo);
 void		sleeping(t_philosopher *philo);
 void		thinking(t_philosopher *philo);
 
-// observer.c
+// monitor.c
 void		monitor(t_main *m);
 
 // utils_pthread.c
