@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 14:42:33 by jdobos        #+#    #+#                 */
-/*   Updated: 2024/11/20 15:48:29 by jdobos        ########   odam.nl         */
+/*   Updated: 2024/11/21 15:52:34 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,6 @@ enum	e_mutex_param
 {
 	M_PRINT = 0,
 	M_DEATH_FLAG
-};
-
-enum	e_mutex_phil
-{
-	M_DINE_STAT = 0,
-	M_DEATH_TIME,
 };
 
 enum	e_action
